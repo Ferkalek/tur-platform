@@ -1,0 +1,29 @@
+{
+  "name": "tur-platform",
+  "version": "1.0.0",
+  "description": "Angular frontend and NestJS backend application",
+  "homepage": "https://github.com/Ferkalek/tur-platform#readme",
+  "bugs": {
+    "url": "https://github.com/Ferkalek/tur-platform/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ferkalek/tur-platform.git"
+  },
+  "license": "ISC",
+  "author": "Anton Ferkalek",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start:frontend": "cd ui && npm start",
+    "start:backend": "cd api && npm start",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "build:frontend": "cd ui && npm run build",
+    "build:backend": "cd api && npm run build",
+    "build": "concurrently \"npm run build:frontend\" \"npm run build:backend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
