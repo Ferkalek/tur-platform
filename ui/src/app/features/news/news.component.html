@@ -1,0 +1,25 @@
+<div class="news-container">
+	<h2>Останні новини</h2>
+
+	@if (loading) {
+	<div class="loading">Завантаження...</div>
+	} @else if (error) {
+	<div class="error">{{ error }}</div>
+	} @else {
+	<div class="news-grid">
+		@for (item of newsList; track item.id) {
+		<article class="news-card">
+			<img [src]="item.image" [alt]="item.title" class="news-image" />
+			<div class="news-content">
+				<h3>{{ item.title }}</h3>
+				<p class="news-excerpt">{{ item.excerpt }}</p>
+				<div class="news-meta">
+					<span class="date">{{ item.date | date : 'dd.MM.yyyy' }}</span>
+					<a [routerLink]="['/news', item.id]" class="read-more"> Читати далі</a>
+				</div>
+			</div>
+		</article>
+		}
+	</div>
+	}
+</div>

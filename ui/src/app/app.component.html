@@ -1,0 +1,23 @@
+<div class="app-container">
+	<header class="header">
+		<nav class="nav">
+			<h1 class="logo">MyApp</h1>
+			<ul class="nav-list">
+				<li>
+					<a routerLink="/news" routerLinkActive="active" class="nav-link">Новини</a>
+				</li>
+				<li>
+					<a routerLink="/profile" routerLinkActive="active" class="nav-link">Особистий кабінет</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+
+	<main class="main-content">
+		<router-outlet />
+	</main>
+
+	<footer class="footer">
+		<p>&copy; 2025 MyApp. Всі права захищені.</p>
+	</footer>
+</div>
