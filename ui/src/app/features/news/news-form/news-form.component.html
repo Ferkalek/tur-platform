@@ -1,0 +1,38 @@
+<div [formGroup]="form">
+  <div class="form-group">
+    <label for="title">Заголовок новини</label>
+    <input
+      type="text"
+      id="title"
+      formControlName="title"
+      class="form-control"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="excerpt">Анонс новини</label>
+    <input
+      type="text"
+      id="excerpt"
+      formControlName="excerpt"
+      class="form-control"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="content">Зміст новини</label>
+    <textarea
+      id="content"
+      formControlName="content"
+      rows="6"
+      class="form-control"
+    ></textarea>
+  </div>
+
+  <button
+    pButton type="button"
+    [label]="isSaving ? 'Збереження...' : 'Зберегти новину'"
+    [disabled]="isSaving"
+    (click)="saveNews()"
+  ></button>
+</div>

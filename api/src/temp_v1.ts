@@ -59,7 +59,7 @@ news-portal-api/
 // ============================================
 // src/main.ts
 // ============================================
-
+/*
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -157,7 +157,7 @@ export default registerAs('database', (): TypeOrmModuleOptions => ({
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_DATABASE || 'news_portal',
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../2stars/stars.entity{.ts,.js}'],
   synchronize: process.env.NODE_ENV === 'development',
   logging: process.env.NODE_ENV === 'development',
 }));
@@ -571,7 +571,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 }
-
+*/
 // ============================================
 // package.json - Залежності
 // ============================================
