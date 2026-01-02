@@ -2,24 +2,24 @@ import { IsString, IsNotEmpty, MaxLength, IsUrl } from 'class-validator';
 
 export class CreateNewsDto {
   @IsString()
-  @IsNotEmpty({ message: 'Заголовок обов\'язковий' })
-  @MaxLength(80, { message: 'Заголовок не може бути довше 80 символів' })
+  @IsNotEmpty({ message: 'Title is required' })
+  @MaxLength(80, { message: 'Title cannot exceed 80 characters' })
   title: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Короткий опис обов\'язковий' })
+  @IsNotEmpty({ message: 'Excerpt is required' })
   excerpt: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Контент обов\'язковий' })
-  @MaxLength(255, { message: 'Контент не може бути довше 255 символів' })
+  @IsNotEmpty({ message: 'Content is required' })
+  @MaxLength(255, { message: 'Content cannot exceed 255 characters' })
   content: string;
 
   @IsString()
-  @IsUrl({}, { message: 'Невалідна URL адреса зображення' })
+  @IsUrl({}, { message: 'Invalid image URL' })
   image: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Автор обов\'язковий' })
+  @IsNotEmpty({ message: 'Author is required' })
   author: string;
 }

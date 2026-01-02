@@ -1,21 +1,33 @@
 [
   {
+    "id": "1767365914519",
+    "userId": "current-user-id",
+    "title": "sdfsdf !!!",
+    "excerpt": "4rwerwqr",
+    "content": "234rfsd",
+    "image": "https://picsum.photos/800/400?random=37",
+    "author": "Default Author",
+    "date": "2026-01-02T14:58:34.520Z"
+  },
+  {
     "id": "1",
-    "title": "Нові технології в веб-розробці 2025",
+    "title": "Web development 2026",
     "excerpt": "Огляд найважливіших трендів та інструментів для сучасних розробників",
     "content": "У 2025 році веб-розробка досягла нових висот. React Server Components стали стандартом, TypeScript повністю витіснив JavaScript у корпоративному секторі. Edge computing та serverless архітектури тепер доступні всім.",
     "image": "https://picsum.photos/800/400?random=1",
     "date": "2025-12-29T09:45:23.194Z",
-    "author": "Іван Петренко"
+    "author": "Іван Петренко",
+    "userId": "current-user-id"
   },
   {
     "id": "2",
-    "title": "Штучний інтелект змінює індустрію",
+    "title": "AI змінює індустрію",
     "excerpt": "Як AI допомагає розробникам писати код швидше та якісніше",
     "content": "Сучасні AI-асистенти не просто автодоповнюють код - вони розуміють контекст проекту, пропонують оптимальні рішення і навіть можуть рефакторити застарілий код. GitHub Copilot, Claude та інші інструменти стали невід'ємною частиною розробки.",
     "image": "https://picsum.photos/800/400?random=2",
     "date": "2025-12-28T09:45:23.195Z",
-    "author": "Марія Коваленко"
+    "author": "Марія Коваленко",
+    "userId": "current-user-id"
   },
   {
     "id": "3",

@@ -1,13 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonDirective, ButtonModule } from "primeng/button";
+import { ButtonModule } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-
-interface NewsFormType {
-  title: FormControl<string | null>;
-  excerpt: FormControl<string | null>;
-  content: FormControl<string | null>;
-}
+import { NewsFormData, NewsFormType } from '../../../core/models';
 
 @Component({
   selector: 'app-news-form',
@@ -17,17 +12,14 @@ interface NewsFormType {
   imports: [
     ReactiveFormsModule,
     FormsModule,
-    ButtonDirective,
-    ButtonModule
+    ButtonModule,
   ],
 })
 export class NewsFormComponent implements OnInit {
-  
   private fb = inject(FormBuilder);
   private dialogRef = inject(DynamicDialogRef);
-  private dialogConfig = inject(DynamicDialogConfig);
+  private dialogConfig = inject(DynamicDialogConfig<NewsFormData>);
 
-  isSaving = false
   form = this.fb.group<NewsFormType>({
     title: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
     excerpt: new FormControl<string>('', [Validators.required, Validators.maxLength(250)]),
@@ -35,18 +27,27 @@ export class NewsFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('---- dialog data', this.dialogConfig.data);
+    if (this.dialogConfig.data?.id) {
+      const { title, excerpt, content } = this.dialogConfig.data;
+
+      this.form.patchValue({
+        title,
+        excerpt,
+        content
+      });
+    }
   }
 
-  saveNews(): void {
-    if (this.form.valid) {
-      this.isSaving = true;
+  save(): void {
+    if (this.form.invalid) return;
 
-      // Simulate saving process
-      setTimeout(() => {
-        this.isSaving = false;
-        this.dialogRef.close(this.form.value);
-      }, 2000); 
-    }
+    this.dialogRef.close({
+      ...this.dialogConfig.data,
+      ...this.form.value
+    });
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 }

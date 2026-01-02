@@ -22,7 +22,7 @@ export class NewsComponent implements OnInit {
   loading = true;
   error = '';
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadNews();
   }
 
@@ -40,7 +40,7 @@ export class NewsComponent implements OnInit {
           this.newsList = data;
         },
         error: () => {
-          this.error = 'Помилка завантаження новин';
+          this.error = 'Error loading news';
         },
       });
   }

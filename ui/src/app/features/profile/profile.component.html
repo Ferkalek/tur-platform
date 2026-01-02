@@ -1,13 +1,28 @@
+@if (loading) {
+	<div class="align-items-center fixed flex h-full left-0 top-0 w-full z-1 bg-black-alpha-30">
+		<p-progress-spinner ariaLabel="loading" />
+	</div>
+}
+
 <div class="profile-container">
-	<h2>Особистий кабінет</h2>
+	<h2>User Account</h2>
 
 	<h2>My news</h2>
-	<button
-		pButton
+	<p-button
 		type="button"
 		label="Add News"
 		class="p-button-outline"
 		icon="pi pi-plus"
 		(click)="addNews()"
-	></button>	
+	/>
+
+	<div>
+		<app-users-news-list
+			[newsList]="newsList"
+			(editNews)="editNews($event)"
+			(deleteNews)="onDeleteNews($event)"
+		/>
+	</div>
 </div>
+
+<p-toast position="bottom-left" />

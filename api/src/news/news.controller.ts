@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
@@ -28,7 +36,10 @@ export class NewsController {
 
   // PUT /api/news/:id - update a news item
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto): Promise<any> {
+  update(
+    @Param('id') id: string,
+    @Body() updateNewsDto: UpdateNewsDto,
+  ): Promise<any> {
     return this.newsService.update(id, updateNewsDto);
   }
 
