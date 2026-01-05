@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity('news')
 export class News {
@@ -27,6 +28,13 @@ export class News {
 
   @Column({ type: 'varchar', length: 100 })
   author: string;
+
+  @ManyToOne(() => User, (user) => user.news, { eager: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @Column({ name: 'user_id' })
+  userId: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

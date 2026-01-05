@@ -1,27 +1,42 @@
-import { Injectable } from '@nestjs/common';
-
-export type User = any;
+import { Injectable, ConflictException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
-  findAll() {
-    return this.users;
+  async create(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<User> {
+    const existingUser = await this.findByEmail(email);
+
+    if (existingUser) {
+      throw new ConflictException('Користувач з таким email вже існує');
+    }
+
+    const user = this.usersRepository.create({
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+
+    return await this.usersRepository.save(user);
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.usersRepository.findOne({ where: { email } });
+  }
+
+  async findById(id: string): Promise<User | null> {
+    return await this.usersRepository.findOne({ where: { id } });
   }
 }

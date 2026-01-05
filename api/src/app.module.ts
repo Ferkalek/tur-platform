@@ -3,9 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConfig from './config/database.config';
 import { NewsModule } from './news/news.module';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,9 +15,9 @@ import { NewsModule } from './news/news.module';
     TypeOrmModule.forRootAsync({
       useFactory: () => databaseConfig(),
     }),
+    AuthModule,
+    UsersModule,
     NewsModule,
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}
