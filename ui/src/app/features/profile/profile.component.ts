@@ -102,12 +102,15 @@ export class ProfileComponent implements OnInit {
           }
 
           this.loading = true;
-          
-          return this.newsService.createNews({
+
+          const newsItem = {
             ...result,
             image: this.getRandomImage(),
             author: 'Default Author'
-          });
+          };
+          delete newsItem.userId;
+          
+          return this.newsService.createNews(newsItem);
         }),
       )
       .subscribe((data) => {
@@ -138,7 +141,9 @@ export class ProfileComponent implements OnInit {
 
           this.loading = true;
 
-          return this.newsService.updateNews(news.id, result as Partial<News>);
+          const updatedNews = { ...result };
+          delete updatedNews.userId;
+          return this.newsService.updateNews(news.id, updatedNews as Partial<News>);
         }
       ))
       .subscribe({

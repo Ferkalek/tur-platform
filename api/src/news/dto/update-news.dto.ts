@@ -3,6 +3,10 @@ import { IsString, IsOptional, MaxLength, IsUrl } from 'class-validator';
 export class UpdateNewsDto {
   @IsString()
   @IsOptional()
+  id?: string;
+
+  @IsString()
+  @IsOptional()
   @MaxLength(80)
   title?: string;
 
@@ -23,4 +27,12 @@ export class UpdateNewsDto {
   @IsString()
   @IsOptional()
   author?: string;
+
+  @IsString()
+  @IsOptional()
+  createdAt?: Date;
+
+  @IsString()
+  @IsOptional()
+  updatedAt?: Date;
 }
