@@ -12,11 +12,21 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // data validation
-  app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(process.env.PORT ?? 3000);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
 
   console.log('Server is running http://localhost:3000');
-  console.log('API of news: http://localhost:3000/api/news');
+  console.log('API of news: http://localhost:' + port + '/api/news');
+  console.log('Connect to Supabase');
 }
 bootstrap();

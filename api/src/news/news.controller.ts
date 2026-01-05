@@ -6,11 +6,13 @@ import {
   Delete,
   Body,
   Param,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
-import { News } from './interface/news.interface';
+import { News } from './entities/news.entity';
 
 @Controller('news')
 export class NewsController {
@@ -30,6 +32,7 @@ export class NewsController {
 
   // POST /api/news - create a news item
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createNewsDto: CreateNewsDto): Promise<News> {
     return this.newsService.create(createNewsDto);
   }
@@ -45,6 +48,7 @@ export class NewsController {
 
   // DELETE /api/news/:id - delete a news item
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string): Promise<{ message: string }> {
     return this.newsService.remove(id);
   }
