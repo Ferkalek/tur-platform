@@ -17,7 +17,7 @@ import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { NewsFormComponent } from '../news/news-form/news-form.component';
 import { News, NewsFormData } from '../../core/models';
 import { UsersNewsListComponent } from '../news/users-news-list/users-news-list.component';
-import { NewsService } from '../../core/services';
+import { AuthService, NewsService } from '../../core/services';
 
 @Component({
   selector: 'app-profile',
@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
   private newsService = inject(NewsService);
   private cdr = inject(ChangeDetectorRef);
   private messageService = inject(MessageService);
+  private authService = inject(AuthService);
 
   loading = true;
   newsList: News[] = [];
@@ -61,7 +62,7 @@ export class ProfileComponent implements OnInit {
   }
 
   loadNews() {
-    this.newsService.getNews()
+    this.newsService.getUserNews(this.authService.currentUser()?.id || '')
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => {

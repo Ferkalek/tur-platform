@@ -1,26 +1,37 @@
 <p>Profile Form</p>
 @if (loading) {
-<div class="loading">Завантаження...</div>
+<div class="loading">loading...</div>
 } @else {
 <div class="profile-card">
   <div class="profile-header">
     <div class="avatar">
-      {{ profile.name.charAt(0).toUpperCase() }}
+      {{ profile.firstName.charAt(0).toUpperCase() }}
     </div>
     <div class="profile-info">
-      <h3>{{ profile.name }}</h3>
+      <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
       <p class="email">{{ profile.email }}</p>
     </div>
   </div>
 
   <form class="profile-form" (ngSubmit)="saveProfile()">
     <div class="form-group">
-      <label for="name">Ім'я</label>
+      <label for="firstName">First Name</label>
       <input
         type="text"
-        id="name"
-        [(ngModel)]="profile.name"
-        name="name"
+        id="firstName"
+        [(ngModel)]="profile.firstName"
+        name="firstName"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input
+        type="text"
+        id="lastName"
+        [(ngModel)]="profile.lastName"
+        name="lastName"
         class="form-control"
       />
     </div>
@@ -37,7 +48,7 @@
     </div>
 
     <div class="form-group">
-      <label for="phone">Телефон</label>
+      <label for="phone">Phone</label>
       <input
         type="tel"
         id="phone"
@@ -48,7 +59,7 @@
     </div>
 
     <div class="form-group">
-      <label for="bio">Про себе</label>
+      <label for="bio">About yourself</label>
       <textarea
         id="bio"
         [(ngModel)]="profile.bio"
@@ -59,7 +70,7 @@
     </div>
 
     <button type="submit" class="btn-primary" [disabled]="saving">
-      {{ saving ? 'Збереження...' : 'Зберегти зміни' }}
+      {{ saving ? 'Saving...' : 'Save changes' }}
     </button>
 
     @if (saveMessage) {

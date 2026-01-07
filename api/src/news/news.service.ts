@@ -24,6 +24,21 @@ export class NewsService {
     });
   }
 
+  // GET news by user ID
+  async findByUserId(userId: string): Promise<News[]> {
+    const news = await this.newsRepository.find({
+      where: { userId },
+      order: { createdAt: 'DESC' },
+      relations: ['user'],
+    });
+
+    if (!news) {
+      throw new NotFoundException(`News for user with ID ${userId} not found`);
+    }
+
+    return news;
+  }
+
   // GET one news item by ID
   async findOne(id: string): Promise<News> {
     const news = await this.newsRepository.findOne({

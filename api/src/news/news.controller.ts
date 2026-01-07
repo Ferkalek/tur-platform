@@ -16,6 +16,7 @@ import { UpdateNewsDto } from './dto/update-news.dto';
 import { News } from './entities/news.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('news')
 export class NewsController {
@@ -25,6 +26,12 @@ export class NewsController {
   @Get()
   findAll(): Promise<News[]> {
     return this.newsService.findAll();
+  }
+
+  // GET /api/news/user/:userId - get news items by user ID
+  @Get('user/:userId')
+  findByUserId(@Param('userId') userId: string): Promise<News[]> {
+    return this.newsService.findByUserId(userId);
   }
 
   // GET /api/news/:id - get one news item by id
@@ -39,7 +46,7 @@ export class NewsController {
   @HttpCode(HttpStatus.CREATED)
   create(
     @Body() createNewsDto: CreateNewsDto,
-    @CurrentUser() user: any,
+    @CurrentUser() user: User,
   ): Promise<News> {
     return this.newsService.create(createNewsDto, user.id);
   }

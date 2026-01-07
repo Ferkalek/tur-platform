@@ -19,7 +19,7 @@ export class UsersService {
     const existingUser = await this.findByEmail(email);
 
     if (existingUser) {
-      throw new ConflictException('Користувач з таким email вже існує');
+      throw new ConflictException('User with this email already exists');
     }
 
     const user = this.usersRepository.create({

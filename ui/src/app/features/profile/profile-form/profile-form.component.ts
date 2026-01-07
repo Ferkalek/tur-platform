@@ -38,7 +38,11 @@ export class ProfileFormComponent implements OnInit {
           this.cdr.markForCheck();
         }),
       )
-      .subscribe(data => this.profile = data);
+      .subscribe(data => {
+        if (data) {
+          this.profile = data;
+        }
+      });
   }
 
   saveProfile(): void {

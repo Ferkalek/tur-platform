@@ -1,0 +1,114 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Register</h2>
+      <p>Create a new account</p>
+    </div>
+
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="auth-form"
+    >
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          class="form-control"
+          [class.error]="firstNameControl?.invalid && firstNameControl?.touched"
+          placeholder="John"
+        />
+        @if (
+          firstNameControl?.invalid && firstNameControl?.touched
+        ) {
+          <span class="error-message">First name is required (minimum 2 characters)</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          class="form-control"
+          [class.error]="lastNameControl?.invalid && lastNameControl?.touched"
+          placeholder="Doe"
+        />
+        @if (
+          lastNameControl?.invalid && lastNameControl?.touched
+        ) {
+          <span class="error-message">Last name is required (minimum 2 characters)</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="emailControl?.invalid && emailControl?.touched"
+          placeholder="example@mail.com"
+        />
+        @if (
+          emailControl?.invalid && emailControl?.touched
+        ) {
+          <span class="error-message">Enter a valid email</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [class.error]="passwordControl?.invalid && passwordControl?.touched"
+          placeholder="********"
+        />
+        @if (
+          passwordControl?.invalid && passwordControl?.touched
+        ) {
+          <span class="error-message">Password must be at least 6 characters</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          class="form-control"
+          [class.error]="confirmPasswordControl?.invalid && confirmPasswordControl?.touched"
+          placeholder="********"
+        />
+        @if (
+          registerForm.hasError('passwordMismatch') &&
+          confirmPasswordControl?.touched
+        ) {
+          <span class="error-message">Passwords do not match</span>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="registerForm.invalid || loading"
+      >
+        {{ loading ? 'Loading...' : 'Register' }}
+      </button>
+
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p-toast position="bottom-left" />

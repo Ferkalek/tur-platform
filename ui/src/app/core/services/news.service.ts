@@ -18,6 +18,10 @@ export class NewsService {
     return this.http.get<News>(`${API_BASE_URL}${NEWS_ENDPOINT}/${id}`);
   }
 
+  getUserNews(userId: string): Observable<News[]> {
+    return this.http.get<News[]>(`${API_BASE_URL}${NEWS_ENDPOINT}/user/${userId}`);
+  }
+
   createNews(news: Partial<News>): Observable<News> {
     return this.http.post<News>(`${API_BASE_URL}${NEWS_ENDPOINT}`, news);
   }

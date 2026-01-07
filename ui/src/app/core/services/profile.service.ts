@@ -1,25 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { UserProfile } from '../models/user.model';
+import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private mockProfile: UserProfile = {
-    id: '1',
-    name: 'Іван Петренко',
-    email: 'ivan.petrenko@example.com',
-    phone: '+380 50 123 4567',
-    bio: 'Frontend розробник з досвідом роботи в Angular та TypeScript.',
-  };
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
-  getProfile(): Observable<UserProfile> {
-    return of(this.mockProfile).pipe(delay(500));
+  getProfile(): Observable<UserProfile | null> {
+    const user = this.authService.currentUser();
+
+    if (user) {
+      const { id, firstName, lastName, email } = user;
+
+      // TODO: Replace with real API call
+      return of({ id, firstName, lastName, email, phone: '', bio: '' }).pipe(delay(500));
+    } else {
+      return of(null);
+    }
   }
 
-  updateProfile(profile: UserProfile): Observable<UserProfile> {
-    this.mockProfile = { ...profile };
-    return of(this.mockProfile).pipe(delay(800));
+  updateProfile(profile: UserProfile): Observable<UserProfile | null> {
+    return of(null);
   }
 }

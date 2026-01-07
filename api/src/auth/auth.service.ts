@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +30,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(loginDto.email);
 
     if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
-      throw new UnauthorizedException('Невірний email або пароль');
+      throw new UnauthorizedException('Email or password is incorrect');
     }
 
     return this.generateToken(user);
@@ -39,11 +40,11 @@ export class AuthService {
     return await this.usersService.findById(userId);
   }
 
-  private generateToken(user: any) {
+  private generateToken(user: User) {
     const payload = { sub: user.id, email: user.email };
 
     return {
-      access_token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload),
       user: {
         id: user.id,
         email: user.email,
