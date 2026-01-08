@@ -18,8 +18,4 @@ export class CreateNewsDto {
   @IsString()
   @IsUrl({}, { message: 'Invalid image URL' })
   image: string;
-
-  @IsString()
-  @IsNotEmpty({ message: 'Author is required' })
-  author: string;
 }

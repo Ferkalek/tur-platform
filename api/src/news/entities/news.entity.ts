@@ -26,9 +26,6 @@ export class News {
   @Column({ type: 'text' })
   image: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  author: string;
-
   @ManyToOne(() => User, (user) => user.news, { eager: true })
   @JoinColumn({ name: 'user_id' })
   user: User;

@@ -27,6 +27,18 @@ export class User {
   @Column({ name: 'last_name' })
   lastName: string;
 
+  @Column({ nullable: true })
+  phone?: string;
+
+  @Column({ type: 'text', nullable: true })
+  bio?: string;
+
+  @Column({ name: 'social_link', nullable: true })
+  socialLink?: string;
+
+  @Column({ nullable: true })
+  avatar?: string;
+
   @OneToMany(() => News, (news) => news.user)
   news: News[];
 

@@ -26,10 +26,6 @@ export class UpdateNewsDto {
 
   @IsString()
   @IsOptional()
-  author?: string;
-
-  @IsString()
-  @IsOptional()
   createdAt?: Date;
 
   @IsString()

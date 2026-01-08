@@ -6,8 +6,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { News } from './entities/news.entity';
-import { CreateNewsDto } from './dto/create-news.dto';
-import { UpdateNewsDto } from './dto/update-news.dto';
+import {
+  CreateNewsDto,
+  UpdateNewsDto,
+  ResponseNewsDto,
+  ResponseBaseNewsDto,
+} from './dto';
 
 @Injectable()
 export class NewsService {
@@ -17,15 +21,17 @@ export class NewsService {
   ) {}
 
   // GET all news
-  async findAll(): Promise<News[]> {
-    return await this.newsRepository.find({
+  async findAll(): Promise<ResponseNewsDto[]> {
+    const news = await this.newsRepository.find({
       order: { createdAt: 'DESC' },
       relations: ['user'],
     });
+
+    return news.map((item) => this.mapToResponseNews(item));
   }
 
   // GET news by user ID
-  async findByUserId(userId: string): Promise<News[]> {
+  async findByUserId(userId: string): Promise<ResponseBaseNewsDto[]> {
     const news = await this.newsRepository.find({
       where: { userId },
       order: { createdAt: 'DESC' },
@@ -36,11 +42,71 @@ export class NewsService {
       throw new NotFoundException(`News for user with ID ${userId} not found`);
     }
 
-    return news;
+    return news.map((item) => this.mapToBaseNews(item));
   }
 
   // GET one news item by ID
-  async findOne(id: string): Promise<News> {
+  async findOne(id: string): Promise<ResponseNewsDto> {
+    const news = await this.newsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!news) {
+      throw new NotFoundException(`News with ID ${id} not found`);
+    }
+
+    return this.mapToResponseNews(news);
+  }
+
+  // POST create news
+  async create(
+    createNewsDto: CreateNewsDto,
+    userId: string,
+  ): Promise<ResponseBaseNewsDto> {
+    const news = this.newsRepository.create({
+      ...createNewsDto,
+      userId,
+    });
+
+    const res = await this.newsRepository.save(news);
+
+    return this.mapToBaseNews(res);
+  }
+
+  // PUT/PATCH update news
+  async update(
+    id: string,
+    updateNewsDto: UpdateNewsDto,
+    userId: string,
+  ): Promise<ResponseBaseNewsDto> {
+    const news = await this.findOneNews(id);
+
+    if (news.userId !== userId) {
+      throw new ForbiddenException('You are not allowed to update this news');
+    }
+
+    Object.assign(news, updateNewsDto);
+
+    const res = await this.newsRepository.save(news);
+
+    return this.mapToBaseNews(res);
+  }
+
+  // DELETE delete news
+  async remove(id: string, userId: string): Promise<{ message: string }> {
+    const news = await this.findOneNews(id);
+
+    if (news.userId !== userId) {
+      throw new ForbiddenException('You are not allowed to delete this news');
+    }
+
+    await this.newsRepository.remove(news);
+
+    return { message: `News "${news.title}" was deleted successfully` };
+  }
+
+  private async findOneNews(id: string): Promise<News> {
     const news = await this.newsRepository.findOne({
       where: { id },
       relations: ['user'],
@@ -53,43 +119,29 @@ export class NewsService {
     return news;
   }
 
-  // POST create news
-  async create(createNewsDto: CreateNewsDto, userId: string): Promise<News> {
-    const news = this.newsRepository.create({
-      ...createNewsDto,
+  private mapToResponseNews(news: News): ResponseNewsDto {
+    return {
+      ...news,
+      user: {
+        id: news.userId,
+        firstName: news.user.firstName,
+        lastName: news.user.lastName,
+      },
+    };
+  }
+
+  private mapToBaseNews(news: News): ResponseBaseNewsDto {
+    const { id, title, excerpt, content, image, userId, createdAt, updatedAt } = news;
+
+    return {
+      id,
+      title,
+      excerpt,
+      content,
+      image,
       userId,
-    });
-
-    return await this.newsRepository.save(news);
-  }
-
-  // PUT/PATCH update news
-  async update(
-    id: string,
-    updateNewsDto: UpdateNewsDto,
-    userId: string,
-  ): Promise<News> {
-    const news = await this.findOne(id);
-
-    if (news.userId !== userId) {
-      throw new ForbiddenException('You are not allowed to update this news');
-    }
-
-    Object.assign(news, updateNewsDto);
-
-    return await this.newsRepository.save(news);
-  }
-
-  // DELETE delete news
-  async remove(id: string, userId: string): Promise<{ message: string }> {
-    const news = await this.findOne(id);
-
-    if (news.userId !== userId) {
-      throw new ForbiddenException('You are not allowed to delete this news');
-    }
-
-    await this.newsRepository.remove(news);
-
-    return { message: `News "${news.title}" was deleted successfully` };
+      createdAt,
+      updatedAt,
+    };
   }
 }

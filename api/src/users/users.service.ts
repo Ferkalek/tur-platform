@@ -1,7 +1,12 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -38,5 +43,21 @@ export class UsersService {
 
   async findById(id: string): Promise<User | null> {
     return await this.usersRepository.findOne({ where: { id } });
+  }
+
+  async updateProfile(
+    userId: string,
+    updateProfileData: UpdateProfileDto,
+  ): Promise<User> {
+    const user = await this.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // update only provided fields
+    Object.assign(user, updateProfileData);
+
+    return await this.usersRepository.save(user);
   }
 }

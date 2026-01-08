@@ -7,7 +7,6 @@ export interface News {
   content: string;
   image: string;
   date: Date;
-  author: string;
 }
 
 export interface NewsFormData {

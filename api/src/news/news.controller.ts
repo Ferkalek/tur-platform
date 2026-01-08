@@ -11,8 +11,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
-import { CreateNewsDto } from './dto/create-news.dto';
-import { UpdateNewsDto } from './dto/update-news.dto';
+import {
+  CreateNewsDto,
+  ResponseNewsDto,
+  ResponseBaseNewsDto,
+  UpdateNewsDto,
+} from './dto';
 import { News } from './entities/news.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
@@ -24,51 +28,52 @@ export class NewsController {
 
   // GET /api/news - get all news items
   @Get()
-  findAll(): Promise<News[]> {
-    return this.newsService.findAll();
+  async findAll(): Promise<ResponseNewsDto[]> {
+    return await this.newsService.findAll();
   }
 
   // GET /api/news/user/:userId - get news items by user ID
   @Get('user/:userId')
-  findByUserId(@Param('userId') userId: string): Promise<News[]> {
-    return this.newsService.findByUserId(userId);
+  async findByUserId(@Param('userId') userId: string): Promise<any[]> {
+    return await this.newsService.findByUserId(userId);
   }
 
   // GET /api/news/:id - get one news item by id
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<News> {
-    return this.newsService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<ResponseNewsDto> {
+    return await this.newsService.findOne(id);
   }
 
   // POST /api/news - create a news item
   @Post()
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  create(
+  async create(
     @Body() createNewsDto: CreateNewsDto,
     @CurrentUser() user: User,
-  ): Promise<News> {
-    return this.newsService.create(createNewsDto, user.id);
+  ): Promise<ResponseBaseNewsDto> {
+    return await this.newsService.create(createNewsDto, user.id);
   }
 
   // PUT /api/news/:id - update a news item
   @Put(':id')
-  update(
+  @UseGuards(JwtAuthGuard)
+  async update(
     @Param('id') id: string,
     @Body() updateNewsDto: UpdateNewsDto,
-    @CurrentUser() user: any,
-  ): Promise<any> {
-    return this.newsService.update(id, updateNewsDto, user.id);
+    @CurrentUser() user: User,
+  ): Promise<ResponseBaseNewsDto> {
+    return await this.newsService.update(id, updateNewsDto, user.id);
   }
 
   // DELETE /api/news/:id - delete a news item
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  remove(
+  async remove(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: User,
   ): Promise<{ message: string }> {
-    return this.newsService.remove(id, user.id);
+    return await this.newsService.remove(id, user.id);
   }
 }

@@ -107,16 +107,28 @@ export class ProfileComponent implements OnInit {
           const newsItem = {
             ...result,
             image: this.getRandomImage(),
-            author: 'Default Author'
           };
           delete newsItem.userId;
           
           return this.newsService.createNews(newsItem);
         }),
       )
-      .subscribe((data) => {
-        if (data) {
-          this.loadNews();
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.loadNews();
+          }
+        },
+        error: (error) => {
+          this.loading = false;
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Create News',
+            detail: 'Error creating news item.',
+          });
+
+          this.logoutIfUnauthorize({ ...error });
         }
       });
   }
@@ -159,7 +171,7 @@ export class ProfileComponent implements OnInit {
 
           this.loadNews();
         },
-        error: () => {
+        error: (error) => {
           this.loading = false;
 
           this.messageService.add({
@@ -167,6 +179,8 @@ export class ProfileComponent implements OnInit {
             summary: 'Update News',
             detail: 'Error updating news item.',
           });
+
+          this.logoutIfUnauthorize({ ...error });
         },
       });
   }
@@ -188,7 +202,7 @@ export class ProfileComponent implements OnInit {
 
           this.loadNews();
         },
-        error: () => {
+        error: (error) => {
           this.loading = false;
 
           this.messageService.add({
@@ -196,11 +210,19 @@ export class ProfileComponent implements OnInit {
             summary: 'Deleted News',
             detail: 'Error deleting news item.',
           });
+
+          this.logoutIfUnauthorize({ ...error });
         },
       });
   }
 
   private getRandomImage(): string {
     return `https://picsum.photos/800/400?random=${Math.floor(Math.random() * 100)}`;
+  }
+
+  private logoutIfUnauthorize(error: { statusCode: number }, time = 1000): void {
+    if (error.statusCode === 401) {
+      setTimeout(() => this.authService.logout(), time);
+    }
   }
 }
