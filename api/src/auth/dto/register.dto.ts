@@ -9,10 +9,10 @@ export class RegisterDto {
   password: string;
 
   @IsString()
-  @MaxLength(100)
+  @MaxLength(50)
   firstName: string;
 
   @IsString()
-  @MaxLength(100)
+  @MaxLength(50)
   lastName: string;
 }

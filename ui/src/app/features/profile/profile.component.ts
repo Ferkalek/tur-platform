@@ -12,12 +12,14 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
-import { MessageService } from 'primeng/api';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { NewsFormComponent } from '../news/news-form/news-form.component';
 import { News, NewsFormData } from '../../core/models';
 import { UsersNewsListComponent } from '../news/users-news-list/users-news-list.component';
 import { AuthService, NewsService } from '../../core/services';
+import { MSG_CONFIG } from '../../core/const';
+import { ProfileFormComponent } from './profile-form/profile-form.component';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +33,7 @@ import { AuthService, NewsService } from '../../core/services';
     RippleModule,
     DialogModule,
     UsersNewsListComponent,
+    ProfileFormComponent,
 ],
   providers: [DialogService, MessageService],
 })
@@ -71,16 +74,8 @@ export class ProfileComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: (data) => {
-          this.newsList = data;
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Something went wrong!',
-          });
-        },
+        next: (data) => this.newsList = data,
+        error: (error) => this.errorHandler(error, MSG_CONFIG.defaultError),
       });
   }
 
@@ -115,20 +110,15 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          if (data) {
-            this.loadNews();
-          }
+          if (!data) return;
+
+          this.messageService.add(MSG_CONFIG.createNewsSuccess);
+          this.loadNews();
         },
         error: (error) => {
           this.loading = false;
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Create News',
-            detail: 'Error creating news item.',
-          });
-
-          this.logoutIfUnauthorize({ ...error });
+          this.errorHandler(error, MSG_CONFIG.createNewsError);
         }
       });
   }
@@ -137,10 +127,7 @@ export class ProfileComponent implements OnInit {
     const dialogData: DynamicDialogConfig<NewsFormData> = {
       header: 'Edit News',
       ...this.defaultDialogConfig,
-      data: {
-        ...news,
-        userId: 'current-user-id',
-      }
+      data: { ...news }
     };
     const dialogRef = this.dialogService.open(NewsFormComponent, dialogData);
 
@@ -163,24 +150,14 @@ export class ProfileComponent implements OnInit {
         next: (data) => {
           if (!data) return;
 
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Create News',
-            detail: 'News item has been created successfully.',
-          });
+          this.messageService.add(MSG_CONFIG.updateNewsSuccess);
 
           this.loadNews();
         },
         error: (error) => {
           this.loading = false;
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Update News',
-            detail: 'Error updating news item.',
-          });
-
-          this.logoutIfUnauthorize({ ...error });
+          this.errorHandler(error, MSG_CONFIG.updateNewsError);
         },
       });
   }
@@ -194,24 +171,14 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Deleted News',
-            detail: 'News item has been deleted successfully.',
-          });
+          this.messageService.add(MSG_CONFIG.deleteNewsSuccess);
 
           this.loadNews();
         },
         error: (error) => {
           this.loading = false;
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Deleted News',
-            detail: 'Error deleting news item.',
-          });
-
-          this.logoutIfUnauthorize({ ...error });
+          this.errorHandler(error, MSG_CONFIG.deleteNewsError);
         },
       });
   }
@@ -220,9 +187,13 @@ export class ProfileComponent implements OnInit {
     return `https://picsum.photos/800/400?random=${Math.floor(Math.random() * 100)}`;
   }
 
-  private logoutIfUnauthorize(error: { statusCode: number }, time = 1000): void {
-    if (error.statusCode === 401) {
+  private errorHandler(error: any, msgConfig: ToastMessageOptions, time = 1000): void {
+    if (error?.error.statusCode === 401 || error?.statusCode === 401) {
+      this.messageService.add(MSG_CONFIG.unauthorize);
+
       setTimeout(() => this.authService.logout(), time);
+    } else {
+      this.messageService.add(msgConfig);
     }
   }
 }

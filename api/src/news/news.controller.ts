@@ -34,6 +34,7 @@ export class NewsController {
 
   // GET /api/news/user/:userId - get news items by user ID
   @Get('user/:userId')
+  @UseGuards(JwtAuthGuard)
   async findByUserId(@Param('userId') userId: string): Promise<any[]> {
     return await this.newsService.findByUserId(userId);
   }

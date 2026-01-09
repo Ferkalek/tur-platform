@@ -49,7 +49,9 @@ export class ProfileFormComponent implements OnInit {
     this.saving = true;
     this.saveMessage = '';
 
-    this.profileService.updateProfile(this.profile)
+    const { id, createdAt, updatedAt, ...otherData } = this.profile;
+
+    this.profileService.updateProfile({ ...otherData })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => {

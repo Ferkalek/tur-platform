@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateProfileDto, ResponseUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -41,14 +41,20 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { email } });
   }
 
-  async findById(id: string): Promise<User | null> {
-    return await this.usersRepository.findOne({ where: { id } });
+  async findById(id: string): Promise<ResponseUserDto> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return this.mapResponseDto(user);
   }
 
   async updateProfile(
     userId: string,
     updateProfileData: UpdateProfileDto,
-  ): Promise<User> {
+  ): Promise<ResponseUserDto> {
     const user = await this.findById(userId);
 
     if (!user) {
@@ -58,6 +64,36 @@ export class UsersService {
     // update only provided fields
     Object.assign(user, updateProfileData);
 
-    return await this.usersRepository.save(user);
+    const userRes = await this.usersRepository.save(user);
+
+    return this.mapResponseDto(userRes);
+  }
+
+  private mapResponseDto(user: User): ResponseUserDto {
+    const {
+      id,
+      email,
+      firstName,
+      lastName,
+      phone = '',
+      bio = '',
+      socialLink = '',
+      avatar = '',
+      createdAt,
+      updatedAt,
+    } = user;
+
+    return {
+      id,
+      email,
+      firstName,
+      lastName,
+      phone,
+      bio,
+      socialLink,
+      avatar,
+      createdAt,
+      updatedAt,
+    };
   }
 }

@@ -6,7 +6,9 @@ export interface News {
   excerpt: string;
   content: string;
   image: string;
-  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
 }
 
 export interface NewsFormData {
