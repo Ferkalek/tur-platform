@@ -1,5 +1,5 @@
-<div class="auth-container">
-  <div class="auth-card">
+<div class="p-5">
+  <div class="auth-card mx-auto">
     <div class="auth-header">
       <h2>Register</h2>
       <p>Create a new account</p>
@@ -47,28 +47,32 @@
       <div class="form-group">
         <label for="email">Email</label>
         <input
-          type="email"
+          pInputText
+          type="text"
           id="email"
+          placeholder="email"
           formControlName="email"
-          class="form-control"
-          [class.error]="emailControl?.invalid && emailControl?.touched"
-          placeholder="example@mail.com"
+          [invalid]="emailControl?.invalid && emailControl?.touched"
         />
         @if (
           emailControl?.invalid && emailControl?.touched
         ) {
-          <span class="error-message">Enter a valid email</span>
+          <p-message
+            severity="error"
+            size="small"
+            variant="simple"
+          >Enter a valid email</p-message>
         }
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
         <input
+          pInputText
           type="password"
           id="password"
           formControlName="password"
-          class="form-control"
-          [class.error]="passwordControl?.invalid && passwordControl?.touched"
+          [invalid]="passwordControl?.invalid && passwordControl?.touched"
           placeholder="********"
         />
         @if (
@@ -97,12 +101,11 @@
       </div>
 
       <button
+        pButton
         type="submit"
-        class="btn-primary"
+        [label]="loading ? 'Loading...' : 'Register'"
         [disabled]="registerForm.invalid || loading"
-      >
-        {{ loading ? 'Loading...' : 'Register' }}
-      </button>
+      ></button>
 
       <div class="auth-footer">
         <p>Already have an account? <a routerLink="/login">Sign In</a></p>

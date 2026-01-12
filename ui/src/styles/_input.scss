@@ -1,0 +1,50 @@
+@layer custome-them {
+  .p-inputtext {
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: var(--background-white);
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease;
+    width: 100%;
+  }
+
+  .p-inputtext:enabled:hover {
+    border-color: var(--border-hover);
+  }
+
+  .p-inputtext:enabled:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  }
+
+  .p-inputtext.p-invalid {
+    border-color: var(--danger-color);
+  }
+
+  .p-inputtext.p-invalid:enabled:focus {
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+  }
+
+  .p-inputtext:disabled {
+    background: var(--background-light);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* Small size */
+  .p-inputtext.p-inputtext-sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Large size */
+  .p-inputtext.p-inputtext-lg {
+    font-size: 1.125rem;
+    padding: 1rem 1.25rem;
+  }
+}

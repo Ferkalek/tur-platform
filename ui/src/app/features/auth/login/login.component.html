@@ -41,12 +41,11 @@
       </div>
 
       <button
+        pButton
         type="submit"
-        class="btn-primary"
+        [label]="loading ? 'Loading...' : 'Sign In'"
         [disabled]="loginForm.invalid || loading"
-      >
-        {{ loading ? 'Loading...' : 'Sign In' }}
-      </button>
+      ></button>
 
       <div class="auth-footer">
         <p>Don't have an account? <a routerLink="/register">Register</a></p>

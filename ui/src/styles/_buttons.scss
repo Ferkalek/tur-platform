@@ -1,0 +1,150 @@
+@layer custome-them {
+  .p-button {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    border: none;
+    transition: all var(--transition-speed) ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Primary Button */
+  .p-button.p-button-primary,
+  .p-button:not(.p-button-outlined):not(.p-button-text) {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .p-button.p-button-primary:hover,
+  .p-button:not(.p-button-outlined):not(.p-button-text):hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .p-button.p-button-primary:active,
+  .p-button:not(.p-button-outlined):not(.p-button-text):active {
+    background: var(--primary-active);
+    transform: translateY(0);
+  }
+
+  /* Secondary Button */
+  .p-button.p-button-secondary {
+    background: var(--secondary-color);
+    color: white;
+  }
+
+  .p-button.p-button-secondary:hover {
+    background: var(--secondary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Success Button */
+  .p-button.p-button-success {
+    background: var(--success-color);
+    color: white;
+  }
+
+  .p-button.p-button-success:hover {
+    background: var(--success-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Danger Button */
+  .p-button.p-button-danger {
+    background: var(--danger-color);
+    color: white;
+  }
+
+  .p-button.p-button-danger:hover {
+    background: var(--danger-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Warning Button */
+  .p-button.p-button-warning {
+    background: var(--warning-color);
+    color: white;
+  }
+
+  .p-button.p-button-warning:hover {
+    background: var(--warning-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Outlined Button */
+  .p-button.p-button-outlined {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  .p-button.p-button-outlined:hover {
+    background: var(--primary-light);
+    transform: translateY(-1px);
+  }
+
+  .p-button.p-button-outlined.p-button-danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+  }
+
+  .p-button.p-button-outlined.p-button-danger:hover {
+    background: rgba(244, 67, 54, 0.1);
+  }
+
+  /* Text Button */
+  .p-button.p-button-text {
+    background: transparent;
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+  }
+
+  .p-button.p-button-text:hover {
+    background: var(--primary-light);
+  }
+
+  /* Icon Only Button */
+  .p-button.p-button-icon-only {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  /* Small & Large размеры */
+  .p-button.p-button-sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .p-button.p-button-lg {
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+  }
+
+  /* Disabled State */
+  .p-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Loading State */
+  .p-button .p-button-loading-icon {
+    margin-right: 0.5rem;
+  }
+}

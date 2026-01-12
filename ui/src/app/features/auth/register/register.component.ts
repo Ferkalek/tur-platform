@@ -7,9 +7,12 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { AuthService } from '../../../core/services';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +23,9 @@ import { ToastModule } from 'primeng/toast';
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
+    ButtonModule,
+    InputTextModule,
+    MessageModule,
     ToastModule
   ],
   providers: [MessageService],
@@ -32,6 +38,7 @@ export class RegisterComponent {
   private messageService = inject(MessageService);
 
   loading = false;
+  isFormSubmitted = false;
 
   registerForm = this.fb.nonNullable.group(
     {
@@ -64,6 +71,11 @@ export class RegisterComponent {
 
   get confirmPasswordControl(): AbstractControl<string> | null {
     return this.registerForm.get('confirmPassword');
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.registerForm.get(controlName);
+    return !!control?.invalid && control.touched && !this.isFormSubmitted;
   }
 
   passwordMatchValidator(control: AbstractControl) {

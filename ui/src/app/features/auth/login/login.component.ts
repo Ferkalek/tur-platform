@@ -6,6 +6,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../../../core/services';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ import { AuthService } from '../../../core/services';
     ReactiveFormsModule,
     RouterLink,
     ToastModule,
+    ButtonModule,
   ],
   providers: [MessageService],
 })

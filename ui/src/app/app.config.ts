@@ -21,10 +21,16 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     providePrimeNG({
         theme: {
-            preset: Aura
-            // preset: Lara
-            // preset: Material
-            // preset: Nora
+            preset: Aura,
+            // preset: Lara,
+            // preset: Material,
+            // preset: Nora,
+            options: {
+              cssLayer: {
+                name: 'primeng',
+                order: 'primeng, custome-them'
+              }
+            }
         }
     })
   ]
