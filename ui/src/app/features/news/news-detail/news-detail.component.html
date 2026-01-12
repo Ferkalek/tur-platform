@@ -11,7 +11,7 @@
 				<h3>{{ news.title }}</h3>
 				<p class="news-content">{{ news.content }}</p>
 				<div class="news-meta">
-					<span class="date">{{ news.date | date : 'dd.MM.yyyy' }}</span>
+					<span class="date">{{ news.createdAt | date : 'dd.MM.yyyy' }}</span>
 				</div>
 			</div>
 		</article>
