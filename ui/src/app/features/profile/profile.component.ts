@@ -20,6 +20,7 @@ import { UsersNewsListComponent } from '../news/users-news-list/users-news-list.
 import { AuthService, NewsService } from '../../core/services';
 import { MSG_CONFIG } from '../../core/const';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { LoaderComponent } from '../../shared/components';
 
 @Component({
   selector: 'app-profile',
@@ -27,13 +28,13 @@ import { ProfileFormComponent } from './profile-form/profile-form.component';
 	styleUrls: ['./profile.component.scss'],
   standalone: true,
   imports: [
-    ProgressSpinnerModule,
     ToastModule,
     ButtonModule,
     RippleModule,
     DialogModule,
     UsersNewsListComponent,
     ProfileFormComponent,
+    LoaderComponent,
 ],
   providers: [DialogService, MessageService],
 })
@@ -47,7 +48,6 @@ export class ProfileComponent implements OnInit {
 
   loading = true;
   newsList: News[] = [];
-  error = '';
 
   defaultDialogConfig: DynamicDialogConfig = {
     width: '700px',

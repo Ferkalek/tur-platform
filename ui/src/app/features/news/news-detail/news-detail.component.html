@@ -1,20 +1,17 @@
-<div class="news-container">
-	@if (loading) {
-	<div class="loading">Завантаження...</div>
-	} @else if (error) {
-	<div class="error">{{ error }}</div>
-	} @else {
-	<div class="news-grid">
-		<article class="news-card">
-			<img [src]="news.image" [alt]="news.title" class="news-image" />
-			<div class="news-content">
-				<h3>{{ news.title }}</h3>
-				<p class="news-content">{{ news.content }}</p>
-				<div class="news-meta">
-					<span class="date">{{ news.createdAt | date : 'dd.MM.yyyy' }}</span>
-				</div>
-			</div>
-		</article>
+@if (loading) {
+	<app-loader />
+} @else {
+<div class="w-10 mx-auto py-6">
+	<h2 class="mb-4">{{ news.title }}</h2>
+
+	<img [src]="news.image" [alt]="news.title" class="w-full" />
+	
+	<div class="my-3">{{ news.content }}</div>
+
+	<div class="pt-3 border-top-1 border-gray-200">
+		<span class="text-sm text-gray-500">{{ news.createdAt | date : 'dd.MM.yyyy' }}</span>
 	</div>
-	}
 </div>
+}
+
+<p-toast position="bottom-left" />

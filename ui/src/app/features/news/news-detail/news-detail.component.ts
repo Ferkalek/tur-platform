@@ -3,19 +3,32 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { NewsService } from '../../../core/services/news.service';
 import { News } from '../../../core/models/news.model';
+import { MSG_CONFIG } from '../../../core/const';
+import { LoaderComponent } from '../../../shared/components';
 
 @Component({
   selector: 'app-news-detail',
 	templateUrl: './news-detail.component.html',
 	styleUrls: ['./news-detail.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ToastModule,
+    LoaderComponent
+],
+  providers: [
+    MessageService,
+  ]
 })
 export class NewsDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private newsService = inject(NewsService);
+  private messageService = inject(MessageService);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
 
@@ -41,7 +54,7 @@ export class NewsDetailComponent implements OnInit {
           this.cdr.markForCheck();
         },
         error: () => {
-          this.error = 'Помилка завантаження новин';
+          this.messageService.add(MSG_CONFIG.defaultError);
           this.loading = false;
           this.cdr.markForCheck();
         },

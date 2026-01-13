@@ -1,46 +1,53 @@
 <div class="p-5">
-  <div class="auth-card mx-auto">
-    <div class="auth-header">
-      <h2>Register</h2>
-      <p>Create a new account</p>
+  <div class="animation-slide-up bg-white border-round-xl max-w-28rem mx-auto p-6 shadow-2">
+    <div class="text-center mb-4">
+      <h2 class="mb-4">Register</h2>
+      <p class="text-gray-500">Create a new account</p>
     </div>
 
     <form
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
-      class="auth-form"
     >
       <div class="form-group">
         <label for="firstName">First Name</label>
         <input
+          pInputText
           type="text"
           id="firstName"
           formControlName="firstName"
-          class="form-control"
-          [class.error]="firstNameControl?.invalid && firstNameControl?.touched"
+          [invalid]="firstNameControl?.invalid && firstNameControl?.touched"
           placeholder="John"
         />
         @if (
           firstNameControl?.invalid && firstNameControl?.touched
         ) {
-          <span class="error-message">First name is required (minimum 2 characters)</span>
+          <p-message
+            severity="error"
+            size="small"
+            variant="simple"
+          >First name is required (minimum 2 characters)</p-message>
         }
       </div>
 
       <div class="form-group">
         <label for="lastName">Last Name</label>
         <input
+          pInputText
           type="text"
           id="lastName"
           formControlName="lastName"
-          class="form-control"
-          [class.error]="lastNameControl?.invalid && lastNameControl?.touched"
+          [invalid]="lastNameControl?.invalid && lastNameControl?.touched"
           placeholder="Doe"
         />
         @if (
           lastNameControl?.invalid && lastNameControl?.touched
         ) {
-          <span class="error-message">Last name is required (minimum 2 characters)</span>
+          <p-message
+            severity="error"
+            size="small"
+            variant="simple"
+          >Last name is required (minimum 2 characters)</p-message>
         }
       </div>
 
@@ -78,37 +85,47 @@
         @if (
           passwordControl?.invalid && passwordControl?.touched
         ) {
-          <span class="error-message">Password must be at least 6 characters</span>
+          <p-message
+            severity="error"
+            size="small"
+            variant="simple"
+          >Password must be at least 6 characters</p-message>
         }
       </div>
 
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
         <input
+          pInputText
           type="password"
           id="confirmPassword"
           formControlName="confirmPassword"
-          class="form-control"
-          [class.error]="confirmPasswordControl?.invalid && confirmPasswordControl?.touched"
+          [invalid]="confirmPasswordControl?.invalid && confirmPasswordControl?.touched"
           placeholder="********"
         />
         @if (
           registerForm.hasError('passwordMismatch') &&
           confirmPasswordControl?.touched
         ) {
-          <span class="error-message">Passwords do not match</span>
+          <p-message
+            severity="error"
+            size="small"
+            variant="simple"
+          >Passwords do not match</p-message>
         }
       </div>
 
-      <button
-        pButton
-        type="submit"
-        [label]="loading ? 'Loading...' : 'Register'"
-        [disabled]="registerForm.invalid || loading"
-      ></button>
+      <div class="flex justify-content-center mb-3">
+        <button
+          pButton
+          type="submit"
+          [label]="loading ? 'Loading...' : 'Register'"
+          [disabled]="registerForm.invalid || loading"
+        ></button>
+      </div>
 
-      <div class="auth-footer">
-        <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+      <div class="pt-3 border-top-1 border-gray-200 text-center">
+        <p class="text-gray-500">Already have an account? <a routerLink="/login">Sign In</a></p>
       </div>
     </form>
   </div>

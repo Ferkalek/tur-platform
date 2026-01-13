@@ -7,18 +7,34 @@ body {
   min-height: 100vh;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 1rem;
+  line-height: 1.42;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-primary);
 }
 
-p {
+h1, h2, h3, h4, h5, h6, p, ul, ol {
   margin: 0;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 0.85rem;
 }
 
 ul, ol {
   list-style-type: none;
-  margin: 0;
   padding: 0;
 }
 

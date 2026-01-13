@@ -15,7 +15,7 @@ import { AuthService } from './core/services';
     RouterLink,
     RouterLinkActive,
     ButtonModule,
-],
+  ],
 })
 export class AppComponent {
 	authService = inject(AuthService);
