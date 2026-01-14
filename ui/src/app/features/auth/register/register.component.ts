@@ -18,6 +18,7 @@ import { AuthService } from '../../../core/services';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  host: { class: 'block w-full' },
   standalone: true,
   imports: [
     CommonModule,

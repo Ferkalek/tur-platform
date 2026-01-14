@@ -1,44 +1,37 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-} from '@angular/core';
-import { finalize, mergeMap, of } from 'rxjs';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
-import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { NewsFormComponent } from '../news/news-form/news-form.component';
-import { News, NewsFormData } from '../../core/models';
-import { UsersNewsListComponent } from '../news/users-news-list/users-news-list.component';
-import { AuthService, NewsService } from '../../core/services';
-import { MSG_CONFIG } from '../../core/const';
-import { ProfileFormComponent } from './profile-form/profile-form.component';
-import { LoaderComponent } from '../../shared/components';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { finalize, mergeMap, of } from 'rxjs';
+
+import { UsersNewsListComponent } from '../../news/users-news-list/users-news-list.component';
+import { News, NewsFormData } from '../../../core/models';
+import { NewsFormComponent } from '../../news/news-form/news-form.component';
+import { AuthService, NewsService } from '../../../core/services';
+import { MSG_CONFIG } from '../../../core/const';
+import { LoaderComponent } from '../../../shared/components';
 
 @Component({
-  selector: 'app-profile',
-	templateUrl: './profile.component.html',
-	styleUrls: ['./profile.component.scss'],
+  selector: 'app-my-news',
+  templateUrl: './my-news.component.html',
+  styleUrls: ['./my-news.component.scss'],
   standalone: true,
   imports: [
-    ToastModule,
     ButtonModule,
-    RippleModule,
     DialogModule,
     UsersNewsListComponent,
-    ProfileFormComponent,
     LoaderComponent,
-],
-  providers: [DialogService, MessageService],
+    ToastModule,
+  ],
+  providers: [
+    DialogService,
+    MessageService,
+  ],
 })
-export class ProfileComponent implements OnInit {
+export class MyNewsComponent implements OnInit {
   private dialogService = inject(DialogService);
   private destroyRef = inject(DestroyRef);
   private newsService = inject(NewsService);
@@ -122,7 +115,7 @@ export class ProfileComponent implements OnInit {
         }
       });
   }
-
+  
   editNews(news: News): void {
     const dialogData: DynamicDialogConfig<NewsFormData> = {
       header: 'Edit News',

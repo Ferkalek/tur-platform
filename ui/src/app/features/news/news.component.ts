@@ -14,17 +14,18 @@ import { LoaderComponent } from '../../shared/components';
   selector: 'app-news',
 	templateUrl: './news.component.html',
 	styleUrls: ['./news.component.scss'],
+  host: { class: 'block w-full' },
   standalone: true,
   imports: [
     CommonModule,
     RouterLink,
     ToastModule,
     LoaderComponent,
-],
+  ],
   providers: [
     MessageService,
   ]
-	})
+})
 export class NewsComponent implements OnInit {
   private newsService = inject(NewsService);
   private messageService = inject(MessageService);

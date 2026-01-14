@@ -1,0 +1,25 @@
+@if (loading) {
+	<app-loader />
+}
+
+<h2>Profile</h2>
+
+<div class="card mx-auto animation-fade-in max-w-800">
+	<div class="profile-header">
+		<div class="avatar">
+			{{ profile.firstName.charAt(0).toUpperCase() }}
+		</div>
+		<div class="profile-info">
+			<h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
+			<p class="text-gray">{{ profile.email }}</p>
+		</div>
+	</div>
+	<!-- 
+	"phone": null,
+	"bio": "ewfgvb esfddsfgssf fd sf",
+	"socialLink": null,
+-->
+</div>
+
+
+<p-toast position="bottom-left" />

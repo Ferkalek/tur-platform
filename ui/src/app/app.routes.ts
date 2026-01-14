@@ -9,19 +9,13 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then(
-        (m) => m.LoginComponent,
-      ),
+    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),
     canActivate: [guestGuard],
     title: 'Sign In',
   },
   {
     path: 'register',
-    loadComponent: () =>
-      import('./features/auth/register/register.component').then(
-        (m) => m.RegisterComponent,
-      ),
+    loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),
     canActivate: [guestGuard],
     title: 'Registration',
   },
@@ -32,21 +26,29 @@ export const routes: Routes = [
   },
   {
     path: 'news/:id',
-    loadComponent: () =>
-      import('./features/news/news-detail/news-detail.component').then(m => m.NewsDetailComponent),
+    loadComponent: () => import('./features/news/news-detail/news-detail.component').then(m => m.NewsDetailComponent),
     title: 'News Details',
   },
   {
     path: 'profile',
-    loadComponent: () =>
-      import('./features/profile/profile.component').then(m => m.ProfileComponent),
+    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard],
     title: 'Personal Cabinet',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/dashboard/profile/profile.component').then(m => m.ProfileComponent),
+      },
+      {
+        path: 'my-news',
+        loadComponent: () => import('./features/dashboard/my-news/my-news.component').then(m => m.MyNewsComponent),
+        title: 'My News',
+      }
+    ]
   },
   {
     path: '**',
-    loadComponent: () =>
-      import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent),
+    loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent),
     title: 'Page Not Found',
   },
 ];

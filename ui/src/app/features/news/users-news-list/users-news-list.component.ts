@@ -10,7 +10,11 @@ import { USERS_NEWS_TABLE_COLUMNS } from './table.config';
   templateUrl: './users-news-list.component.html',
   styleUrls: ['./users-news-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+  ],
 })
 export class UsersNewsListComponent {
   @Input() newsList: News[] = [];

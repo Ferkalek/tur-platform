@@ -8,6 +8,7 @@ import { AuthService } from './core/services';
   selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
+  host: { class: 'block min-h-screen' },
   standalone: true,
   imports: [
     CommonModule,

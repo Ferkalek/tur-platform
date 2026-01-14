@@ -13,6 +13,7 @@ import { AuthService } from '../../../core/services';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  host: { class: 'block w-full' },
   standalone: true,
   imports: [
     CommonModule,

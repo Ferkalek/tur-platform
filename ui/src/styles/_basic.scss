@@ -13,12 +13,17 @@ body {
   color: var(--text-primary);
 }
 
+.text-gray {
+  color: var(--text-secondary);
+}
+
 h1, h2, h3, h4, h5, h6, p, ul, ol {
   margin: 0;
 }
 
 h2 {
   font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 h3 {
@@ -50,3 +55,23 @@ a {
     color: var(--primary-active);
   }
 }
+
+.max-w-800 {
+  max-width: 800px;
+}
+
+.bg-white {
+  background-color: var(--background-white) !important;
+}
+
+.bg-light {
+  background-color: var(--background-light) !important;
+}
+
+.card {
+  box-shadow: var(--shadow-md);
+	background-color: var(--background-white);
+	border-radius: var(--border-radius);
+	padding: 2rem;
+}
+

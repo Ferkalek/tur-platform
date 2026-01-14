@@ -1,0 +1,23 @@
+<h2>My News</h2>
+
+@if (loading) {
+	<app-loader />
+} @else {
+  <div class="flex">
+    <button
+      pButton
+      type="button"
+      label="Add News"
+      icon="pi pi-plus"
+      (click)="addNews()"
+    ></button>
+  </div>
+
+  <app-users-news-list
+    [newsList]="newsList"
+    (editNews)="editNews($event)"
+    (deleteNews)="onDeleteNews($event)"
+  />
+}
+
+<p-toast position="bottom-left" />
