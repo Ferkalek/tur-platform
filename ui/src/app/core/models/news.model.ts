@@ -29,4 +29,5 @@ export interface NewsColumn {
   field: string;
   header: string;
   isAction?: boolean;
+  style?: string;
 }

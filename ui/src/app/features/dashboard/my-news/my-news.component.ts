@@ -51,6 +51,8 @@ export class MyNewsComponent implements OnInit {
     dismissableMask: true,
     keepInViewport: true,
     resizable: true,
+    modal: true,
+    styleClass: 'non-footer'
   };
 
   ngOnInit(): void {
@@ -120,7 +122,7 @@ export class MyNewsComponent implements OnInit {
     const dialogData: DynamicDialogConfig<NewsFormData> = {
       header: 'Edit News',
       ...this.defaultDialogConfig,
-      data: { ...news }
+      data: { ...news },
     };
     const dialogRef = this.dialogService.open(NewsFormComponent, dialogData);
 

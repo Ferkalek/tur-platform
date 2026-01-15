@@ -40,7 +40,7 @@ export class UpdateProfileDto {
   })
   @IsString()
   @IsOptional()
-  @IsPhoneNumber(undefined, { message: 'Invalid phone number' })
+  // @IsPhoneNumber(undefined, { message: 'Invalid phone number' })
   @MaxLength(20, { message: 'Phone number cannot exceed 20 characters' })
   phone?: string;
 
@@ -68,6 +68,6 @@ export class UpdateProfileDto {
   })
   @IsString()
   @IsOptional()
-  @IsUrl({}, { message: 'Invalid social link URL' })
+  // @IsUrl({}, { message: 'Invalid social link URL' })
   socialLink?: string;
 }

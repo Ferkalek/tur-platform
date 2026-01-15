@@ -3,38 +3,74 @@
   <div class="form-group">
     <label for="title">Title</label>
     <input
+      pInputText
       type="text"
       id="title"
       formControlName="title"
-      class="form-control"
+      [invalid]="titleControl?.invalid && titleControl?.touched"
     />
+    @if (titleControl?.errors?.['required'] && titleControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Title is required</p-message>
+    } @else if (titleControl?.errors?.['maxlength'] && titleControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Title is too big</p-message>
+    }
   </div>
 
   <div class="form-group">
     <label for="excerpt">Excerpt</label>
     <input
+      pInputText
       type="text"
       id="excerpt"
       formControlName="excerpt"
-      class="form-control"
+      [invalid]="excerptControl?.invalid && excerptControl?.touched"
     />
+    @if (excerptControl?.errors?.['required'] && excerptControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Excerpt is required</p-message>
+    } @else if (excerptControl?.errors?.['maxlength'] && excerptControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Excerpt is too big</p-message>
+    }
   </div>
 
   <div class="form-group">
     <label for="content">Content</label>
     <textarea
+      pTextarea
       id="content"
       formControlName="content"
       rows="6"
-      class="form-control"
+      [invalid]="contentControl?.invalid && contentControl?.touched"
     ></textarea>
+    @if (contentControl?.invalid && contentControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Content is required</p-message>
+    }
   </div>
 
   <div class="flex justify-content-end mt-3">
     <button
       pButton
       type="button"
-      class="p-button-secondary mr-2"
+      class="p-button-outlined mr-2"
       [label]="'Cansel'"
       [disabled]="false"
       (click)="close()"
@@ -44,6 +80,7 @@
       type="button"
       [label]="'Save'"
       [disabled]="false"
+      [disabled]="form.invalid"
       (click)="save()"
     ></button>
   </div>

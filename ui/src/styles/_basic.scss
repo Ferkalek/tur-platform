@@ -56,10 +56,6 @@ a {
   }
 }
 
-.max-w-800 {
-  max-width: 800px;
-}
-
 .bg-white {
   background-color: var(--background-white) !important;
 }
@@ -75,3 +71,6 @@ a {
 	padding: 2rem;
 }
 
+.b-bottom {
+	border-bottom: 1px solid #eee;
+}

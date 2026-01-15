@@ -8,7 +8,7 @@
   <ng-template #header let-columns>
     <tr>
       @for (col of columns; track col) {
-        <th>
+        <th [style]="col.style">
           {{ col.header }}
         </th>
       }
@@ -18,9 +18,11 @@
     <tr>
       @for (col of columns; track col) {
         @if (!col.isAction) {
-          <td>
-            {{ rowData[col.field] }}
-          </td>
+          @if (col.field === 'createdAt') {
+          <td [style]="col.style">{{ rowData['createdAt'] | date : 'MM/dd/yyyy, hh:mm a' }}</td>
+          } @else {
+            <td [style]="col.style">{{ rowData[col.field] }}</td>
+          }
         }
       }
       <td>

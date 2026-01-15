@@ -1,81 +1,88 @@
-<p>Profile Form</p>
-<!-- @if (loading) {
-<div class="loading">loading...</div>
-} @else {
-<div class="profile-card">
-  <div class="profile-header">
-    <div class="avatar">
-      {{ profile.firstName.charAt(0).toUpperCase() }}
-    </div>
-    <div class="profile-info">
-      <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
-      <p class="email">{{ profile.email }}</p>
-    </div>
+<form [formGroup]="form">
+  <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input
+      pInputText
+      type="text"
+      id="firstName"
+      formControlName="firstName"
+      [invalid]="firstNameControl?.invalid && firstNameControl?.touched"
+    />
+    @if (firstNameControl?.errors?.['required'] && firstNameControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Field is required</p-message>
+    }
   </div>
 
-  <form class="profile-form" (ngSubmit)="saveProfile()">
-    <div class="form-group">
-      <label for="firstName">First Name</label>
-      <input
-        type="text"
-        id="firstName"
-        [(ngModel)]="profile.firstName"
-        name="firstName"
-        class="form-control"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="lastName">Last Name</label>
-      <input
-        type="text"
-        id="lastName"
-        [(ngModel)]="profile.lastName"
-        name="lastName"
-        class="form-control"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        [(ngModel)]="profile.email"
-        name="email"
-        class="form-control"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="phone">Phone</label>
-      <input
-        type="tel"
-        id="phone"
-        [(ngModel)]="profile.phone"
-        name="phone"
-        class="form-control"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="bio">About yourself</label>
-      <textarea
-        id="bio"
-        [(ngModel)]="profile.bio"
-        name="bio"
-        rows="4"
-        class="form-control"
-      ></textarea>
-    </div>
-
-    <button type="submit" class="btn-primary" [disabled]="saving">
-      {{ saving ? 'Saving...' : 'Save changes' }}
-    </button>
-
-    @if (saveMessage) {
-    <div class="save-message">{{ saveMessage }}</div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input
+      pInputText
+      type="text"
+      id="lastName"
+      formControlName="lastName"
+      [invalid]="lastNameControl?.invalid && lastNameControl?.touched"
+    />
+    @if (lastNameControl?.errors?.['required'] && lastNameControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Field is required</p-message>
     }
-  </form>
-</div>
-} -->
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input
+      pInputText
+      type="email"
+      id="email"
+      formControlName="email"
+      [invalid]="emailControl?.invalid && emailControl?.touched"
+    />
+    @if (emailControl?.errors?.['required'] && emailControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Field is required</p-message>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="phone">Phone</label>
+    <input
+      pInputText
+      type="tel"
+      id="phone"
+      formControlName="phone"
+      name="phone"
+      class="form-control"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="bio">About yourself</label>
+    <textarea
+      pTextarea
+      id="bio"
+      formControlName="bio"
+      name="bio"
+      rows="4"
+    ></textarea>
+  </div>
+
+  <div class="flex justify-content-end">
+    <button
+      pButton
+      type="button"
+      label="Save changes"
+      [disabled]="form.invalid"
+      (click)="sendData()"
+    ></button>
+  </div>
+</form>

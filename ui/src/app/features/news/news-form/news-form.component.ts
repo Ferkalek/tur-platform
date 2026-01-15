@@ -1,6 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NewsFormData, NewsFormType } from '../../../core/models';
 
@@ -13,6 +16,9 @@ import { NewsFormData, NewsFormType } from '../../../core/models';
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
+    InputTextModule,
+    TextareaModule,
+    MessageModule,
   ],
 })
 export class NewsFormComponent implements OnInit {
@@ -20,11 +26,23 @@ export class NewsFormComponent implements OnInit {
   private dialogRef = inject(DynamicDialogRef);
   private dialogConfig = inject(DynamicDialogConfig<NewsFormData>);
 
-  form = this.fb.group<NewsFormType>({
-    title: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
+  form = this.fb.nonNullable.group<NewsFormType>({
+    title: new FormControl('', [Validators.required, Validators.maxLength(100)]),
     excerpt: new FormControl<string>('', [Validators.required, Validators.maxLength(250)]),
     content: new FormControl<string>('', [Validators.required]),
   });
+
+  get titleControl(): AbstractControl<string | null> | null {
+    return this.form.get('title');
+  }
+
+  get excerptControl(): AbstractControl<string | null> | null {
+    return this.form.get('excerpt');
+  }
+
+  get contentControl(): AbstractControl<string | null> | null {
+    return this.form.get('content');
+  }
 
   ngOnInit(): void {
     if (this.dialogConfig.data?.id) {

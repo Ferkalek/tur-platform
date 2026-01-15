@@ -7,7 +7,9 @@ type MessageType = 'unauthorize'
   | 'updateNewsError'
   | 'updateNewsSuccess'
   | 'deleteNewsError'
-  | 'deleteNewsSuccess';
+  | 'deleteNewsSuccess'
+  | 'updateProfileSuccess'
+  | 'updateProfileError';
 
 export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
   unauthorize: {
@@ -45,5 +47,15 @@ export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
     severity: 'success',
     summary: 'Deleted News',
     detail: 'News item has been deleted successfully.',
-  }
+  },
+  updateProfileSuccess: {
+    severity: 'success',
+    summary: 'Updated Profile',
+    detail: 'Profile has been updated successfully.',
+  },
+  updateProfileError: {
+    severity: 'Error',
+    summary: 'Updated Profile',
+    detail: 'Error updating Profile.',
+  },
 };
