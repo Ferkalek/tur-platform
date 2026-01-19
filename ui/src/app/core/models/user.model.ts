@@ -8,9 +8,15 @@ export interface UserProfile {
   phone: string;
   bio: string;
   socialLink: string;
-  avatar: string;
   createdAt: Date;
   updatedAt: Date;
+  avatar?: string;
+}
+
+// TODO: maybe it is not needed
+export interface AvatarUploadResponse {
+  url: string;
+  filename: string;
 }
 
 export interface ProfileFormType {

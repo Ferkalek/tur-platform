@@ -23,8 +23,8 @@ export class News {
   @Column({ type: 'varchar', length: 255 })
   content: string;
 
-  @Column({ type: 'text' })
-  image: string;
+  @Column({ type: 'text', array: true, default: [] })
+  images: string[];
 
   @ManyToOne(() => User, (user) => user.news, { eager: true })
   @JoinColumn({ name: 'user_id' })

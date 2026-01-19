@@ -30,11 +30,11 @@ export class CreateNewsDto {
   @MaxLength(255, { message: 'Content cannot exceed 255 characters' })
   content: string;
 
-  @ApiProperty({
-    description: 'URL зображення для новини',
-    example: 'https://picsum.photos/800/400',
-  })
-  @IsString()
-  @IsUrl({}, { message: 'Invalid image URL' })
-  image: string;
+  // @ApiProperty({
+  //   description: 'URL зображення для новини',
+  //   example: 'https://picsum.photos/800/400',
+  // })
+  // @IsString()
+  // @IsUrl({}, { message: 'Invalid image URL' })
+  // image: string;
 }

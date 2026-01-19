@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // alow CORS
   app.enableCors();
@@ -12,9 +14,12 @@ async function bootstrap() {
   // prefix for router
   app.setGlobalPrefix('api');
 
-  // data validation
-  // app.useGlobalPipes(new ValidationPipe());
+  // static files
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
+  });
 
+  // data validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -24,7 +29,7 @@ async function bootstrap() {
   );
 
   // ============================================
-  // SWAGGER КОНФІГУРАЦІЯ
+  // Swagger Config
   // ============================================
   const config = new DocumentBuilder()
     .setTitle('News Portal API')
@@ -59,9 +64,10 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
 
-  console.log('Server is running http://localhost:3000');
+  console.log('Server is running http://localhost:' + port);
   console.log('API of news: http://localhost:' + port + '/api/news');
   console.log('Swagger Docs: http://localhost:' + port + '/api/docs');
+  console.log('Images: http://localhost:' + port + '/uploads/');
   console.log('Connect to Supabase');
 }
 bootstrap();

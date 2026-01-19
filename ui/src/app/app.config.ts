@@ -12,13 +12,16 @@ import Nora from '@primeuix/themes/nora';
 
 
 import { routes } from './app.routes';
-import { authInterceptor } from './core/interceptors';
+import { apiUrlInterceptor, authInterceptor } from './core/interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([
+      apiUrlInterceptor,
+      authInterceptor
+    ])),
     providePrimeNG({
         theme: {
             preset: Aura,

@@ -3,6 +3,8 @@ import {
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -54,6 +56,7 @@ export class UsersService {
   async updateProfile(
     userId: string,
     updateProfileData: UpdateProfileDto,
+    isUpdateAvatar = false,
   ): Promise<ResponseUserDto> {
     const user = await this.findById(userId);
 
@@ -61,8 +64,38 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    // update only provided fields
+    if (isUpdateAvatar) {
+      // Deleting a file from disk
+      const filePath = path.join(process.cwd(), user.avatar);
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    // Updateing only provided fields
     Object.assign(user, updateProfileData);
+
+    const userRes = await this.usersRepository.save(user);
+
+    return this.mapResponseDto(userRes);
+  }
+
+  async deleteAvatar(userId: string): Promise<ResponseUserDto> {
+    const user = await this.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Deleting a file from disk
+    const filePath = path.join(process.cwd(), user.avatar);
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    Object.assign(user, { avatar: '' });
 
     const userRes = await this.usersRepository.save(user);
 

@@ -30,8 +30,65 @@
 } @else {
 	<div class="card animation-fade-in">
 		<div class="flex align-items-center pb-5 mb-5 b-bottom">
-			<div class="avatar">
-				{{ profile.firstName.charAt(0).toUpperCase() }}
+			<div class="flex flex-column align-items-center gap-3">
+				@if (profile.avatar) {
+					<div class="avatar-preview">
+						<!-- TODO: get url from const or env file -->
+						<img
+							[src]="config.staticUrl + profile.avatar" 
+							[alt]="profile.firstName + ' ' + profile.lastName"
+							class="avatar-image"
+						>
+					</div>
+					<div class="flex gap-1">
+						<p-fileUpload
+							#fileUpload
+							mode="basic"
+							name="avatar"
+							accept="image/*"
+							[maxFileSize]="5000000"
+							[auto]="true"
+							chooseStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
+							chooseLabel=""
+							[chooseIcon]="'pi pi-pencil'"
+							[disabled]="uploadingAvatar"
+							(onSelect)="onAvatarSelect($event)"
+							(onError)="onUploadError()"
+							[customUpload]="true"
+							(uploadHandler)="onAvatarUpload($event)"
+						/>
+						<button
+							pButton
+							icon="pi pi-trash"
+							class="border-0 p-button-sm"
+							[rounded]="true"
+							[outlined]="true"
+							(click)="deleteAvatar()"
+						></button>
+					</div>
+				} @else {
+					<p-avatar 
+						[label]="getInitials()" 
+						size="xlarge"
+						class="custom-avatar"
+					/>
+					<p-fileUpload
+						#fileUpload
+						mode="basic"
+						name="avatar"
+						accept="image/*"
+						[maxFileSize]="5000000"
+						[auto]="true"
+						chooseStyleClass="p-button-sm p-button-outlined"
+						chooseLabel="Add photo"
+						[chooseIcon]="uploadingAvatar ? 'pi pi-spin pi-spinner' : 'pi pi-upload'"
+						[disabled]="uploadingAvatar"
+						(onSelect)="onAvatarSelect($event)"
+						(onError)="onUploadError()"
+						[customUpload]="true"
+						(uploadHandler)="onAvatarUpload($event)"
+					/>
+				}
 			</div>
 			
 			<div class="pl-4">

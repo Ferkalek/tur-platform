@@ -9,7 +9,13 @@ type MessageType = 'unauthorize'
   | 'deleteNewsError'
   | 'deleteNewsSuccess'
   | 'updateProfileSuccess'
-  | 'updateProfileError';
+  | 'updateProfileError'
+  | 'wrongFileType'
+  | 'maxFileSize'
+  | 'updateAvatarError'
+  | 'updateAvatarSuccess'
+  | 'deleteAvatarSuccess'
+  | 'deleteAvatarError';
 
 export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
   unauthorize: {
@@ -57,5 +63,35 @@ export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
     severity: 'Error',
     summary: 'Updated Profile',
     detail: 'Error updating Profile.',
+  },
+  wrongFileType: {
+    severity: 'warn',
+    summary: 'Wrong type',
+    detail: 'Please, choose file type JPG, PNG, or WEBP',
+  },
+  maxFileSize: {
+    severity: 'warn',
+    summary: 'File size',
+    detail: 'Maximum file size is 5MB',
+  },
+  updateAvatarSuccess: {
+    severity: 'success',
+    summary: 'Updated Avatar',
+    detail: 'Avatar has been updated successfully.',
+  },
+  updateAvatarError: {
+    severity: 'error',
+    summary: 'Updated Avatar',
+    detail: 'Error updating Avatar.',
+  },
+  deleteAvatarSuccess: {
+    severity: 'success',
+    summary: 'Deletting',
+    detail: 'Avatar has been deleted succsessfully',
+  },
+  deleteAvatarError: {
+    severity: 'error',
+    summary: 'Deletting',
+    detail: 'Error deleting Avatar'
   },
 };

@@ -3,7 +3,7 @@ export class ResponseBaseNewsDto {
   title: string;
   excerpt: string;
   content: string;
-  image: string;
+  images: string[];
   userId: string;
   createdAt: Date;
   updatedAt: Date;
