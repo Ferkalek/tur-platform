@@ -64,6 +64,47 @@
         variant="simple"
       >Content is required</p-message>
     }
+  </div>    
+
+  <div class="card">
+    <p-toast />
+    <p-fileUpload
+      #filesUpload
+      mode="advanced"
+      name="newsImages"
+      accept="image/*"
+      [maxFileSize]="100000"
+      styleClass="hide-progressbar"
+      [fileLimit]="5"
+      [multiple]="true"
+      chooseStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
+      chooseIcon="pi pi-images"
+      chooseLabel=""
+      uploadStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
+      uploadIcon="pi pi-cloud-upload"
+      uploadLabel=""
+      cancelStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
+      cancelIcon="pi pi-times"
+      cancelLabel=""
+      [invalidFileLimitMessageSummary]="'Maximum number of files'"
+      [invalidFileLimitMessageDetail]="'is {0}'"
+      [invalidFileTypeMessageSummary]="'{0} - invalid file type, allowed only images'"
+      invalidFileTypeMessageDetail=""
+      [invalidFileSizeMessageSummary]="'{0} - invalid file size,'"
+      [invalidFileSizeMessageDetail]="'maximum upload size is {0}'"
+      [customUpload]="true"
+      (onSelect)="onSelectFiles($event)"
+      (onError)="onUploadError($event)"
+      (uploadHandler)="onUploadFiles($event)"
+      (onUpload)="onUpload($event)"
+    >
+      <ng-template #empty>
+        <div class="text-center">
+          <i class="pi pi-cloud-upload text-5xl text-gray-400"></i>
+          <p>Drag and drop files to here to upload.</p>
+        </div>
+      </ng-template>
+    </p-fileUpload>
   </div>
 
   <div class="flex justify-content-end mt-3">

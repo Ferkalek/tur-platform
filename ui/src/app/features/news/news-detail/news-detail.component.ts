@@ -9,6 +9,7 @@ import { NewsService } from '../../../core/services/news.service';
 import { News } from '../../../core/models/news.model';
 import { MSG_CONFIG } from '../../../core/const';
 import { LoaderComponent } from '../../../shared/components';
+import { StaticUrlPipe } from '../../../shared/pipes';
 
 @Component({
   selector: 'app-news-detail',
@@ -19,7 +20,8 @@ import { LoaderComponent } from '../../../shared/components';
     CommonModule,
     RouterModule,
     ToastModule,
-    LoaderComponent
+    LoaderComponent,
+    StaticUrlPipe,
 ],
   providers: [
     MessageService,

@@ -89,7 +89,7 @@ export class NewsService {
     id: string,
     imageUrls: string[],
     userId: string,
-  ): Promise<ResponseNewsDto> {
+  ): Promise<ResponseBaseNewsDto> {
     const news = await this.newsRepository.findOne({
       where: { id },
       relations: ['user'],
@@ -115,7 +115,7 @@ export class NewsService {
     news.images = [...(news.images || []), ...imageUrls];
     const res = await this.newsRepository.save(news);
 
-    return this.mapToResponseNews(res);
+    return this.mapToBaseNews(res);
   }
 
   async removeImage(

@@ -1,0 +1,9 @@
+@layer custome-them {
+  .p-fileupload {
+    &.hide-progressbar {
+      .p-progressbar {
+        display: none;
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ import {
   User,
 } from '../models';
 import { HttpClient } from '@angular/common/http';
-import { API_BASE_URL, AUTH_ENDPOINT } from '../const';
+import { AUTH_ENDPOINT } from '../const';
 
 @Injectable({
   providedIn: 'root',
@@ -28,12 +28,12 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<any>(`${API_BASE_URL}${AUTH_ENDPOINT}/login`, credentials)
+    return this.http.post<any>(`${AUTH_ENDPOINT}/login`, credentials)
       .pipe(tap((res) => this.handleAuthSuccess(res)));
   }
 
   register(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<any>(`${API_BASE_URL}${AUTH_ENDPOINT}/register`, data)
+    return this.http.post<any>(`${AUTH_ENDPOINT}/register`, data)
       .pipe(tap((res) => this.handleAuthSuccess(res)));
   }
 

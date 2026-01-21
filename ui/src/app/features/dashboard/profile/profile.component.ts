@@ -20,6 +20,7 @@ import { UserProfile } from '../../../core/models';
 import { LoaderComponent } from '../../../shared/components';
 import { MSG_CONFIG } from '../../../core/const';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { StaticUrlPipe } from '../../../shared/pipes';
 
 @Component({
   selector: 'app-profile',
@@ -35,6 +36,7 @@ import { ProfileFormComponent } from './profile-form/profile-form.component';
     ProfileFormComponent,
     AvatarModule,
     FileUploadModule,
+    StaticUrlPipe,
   ],
   providers: [
     MessageService,

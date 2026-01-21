@@ -5,7 +5,7 @@ export interface News {
   title: string;
   excerpt: string;
   content: string;
-  image: string;
+  images: string[];
   createdAt: Date;
   updatedAt: Date;
   userId: string;

@@ -7,7 +7,7 @@
 	<div class="news-grid animation-fade-in">
 		@for (item of newsList; track item.id) {
 		<article class="flex flex-column news-card overflow-hidden bg-white border-round-lg">
-			<img [src]="item.image" [alt]="item.title" class="news-image" />
+			<img [src]="item.images[0] | staticUrl" [alt]="item.title" class="news-image" />
 			<div class="flex flex-column flex-grow-1 p-4">
 				<h3 class="mb-3">{{ item.title }}</h3>
 				<p class="flex-grow-1 mb-3 text-gray">{{ item.excerpt }}</p>

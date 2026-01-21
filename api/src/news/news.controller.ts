@@ -130,7 +130,7 @@ export class NewsController {
     @Param('id') id: string,
     @UploadedFiles() files: Express.Multer.File[],
     @CurrentUser() user: User,
-  ) {
+  ): Promise<ResponseBaseNewsDto> {
     if (!files || files.length === 0) {
       throw new BadRequestException('Файли не завантажено');
     }

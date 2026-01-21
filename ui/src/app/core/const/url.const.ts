@@ -1,4 +1,5 @@
-export const API_BASE_URL = 'http://localhost:3000/api/';
-export const NEWS_ENDPOINT = 'news';
-export const AUTH_ENDPOINT = 'auth';
-export const USERS_ENDPOINT = 'users';
+import { environment } from '../../../environments/environment';
+
+export const NEWS_ENDPOINT = `${environment.apiUrl}/news`;
+export const AUTH_ENDPOINT = `${environment.apiUrl}/auth`;
+export const USERS_ENDPOINT = `${environment.apiUrl}/users`;
