@@ -120,7 +120,7 @@ export class NewsService {
 
   async removeImage(
     id: string,
-    filename: string,
+    imageUrl: string,
     userId: string,
   ): Promise<{ id: string; images: string[]; message: string }> {
     const news = await this.newsRepository.findOne({
@@ -136,7 +136,7 @@ export class NewsService {
       throw new ForbiddenException('Ви не можете редагувати цю новину');
     }
 
-    const imageUrl = `/uploads/news/${filename}`;
+    console.log('.......... imageUrl', imageUrl);
     const imageIndex = news.images?.indexOf(imageUrl);
 
     if (imageIndex === -1 || imageIndex === undefined) {
@@ -144,7 +144,7 @@ export class NewsService {
     }
 
     // Видаляємо файл з диска
-    const filePath = path.join(process.cwd(), 'uploads', 'news', filename);
+    const filePath = path.join(process.cwd(), imageUrl);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
@@ -156,7 +156,7 @@ export class NewsService {
     return {
       id: updatedNews.id,
       images: updatedNews.images,
-      message: `Зображення ${filename} видалено`,
+      message: `Зображення ${imageUrl} видалено`,
     };
   }
 
@@ -172,6 +172,7 @@ export class NewsService {
       throw new ForbiddenException('You are not allowed to update this news');
     }
 
+    console.log('.......... updateNewsDto', updateNewsDto);
     Object.assign(news, updateNewsDto);
 
     const res = await this.newsRepository.save(news);

@@ -1,0 +1,15 @@
+:host {
+  p-galleria {
+    ::ng-deep {
+      .p-galleria-thumbnails {
+        .p-galleria-thumbnail-items {
+          justify-content: center;
+        }
+
+        .p-galleria-thumbnail-item {
+          flex-grow: 0 !important;
+        }
+      }
+    }
+  }
+}

@@ -176,18 +176,25 @@ export class NewsController {
     return await this.newsService.remove(id, user.id);
   }
 
-  @Delete(':id/images/:filename')
+  @Delete(':id/images')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Видалити конкретне зображення з новини' })
   @ApiParam({ name: 'id', description: 'UUID новини' })
-  @ApiParam({ name: 'filename', description: 'Назва файлу зображення' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        imageUrl: { type: 'string' },
+      },
+    },
+  })
   @ApiResponse({ status: 200, description: 'Зображення видалено' })
   async removeImage(
     @Param('id') id: string,
-    @Param('filename') filename: string,
     @CurrentUser() user: User,
+    @Body() imageUrl: { imageUrl: string },
   ): Promise<{ id: string; images: string[]; message: string }> {
-    return await this.newsService.removeImage(id, filename, user.id);
+    return await this.newsService.removeImage(id, imageUrl.imageUrl, user.id);
   }
 }

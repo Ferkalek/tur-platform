@@ -19,10 +19,9 @@ export class ProfileService {
   }
 
   uploadAvatar(file: File): Observable<UserProfile> {
-    console.log('..... uploadAvatar > file', file);
     const formData = new FormData();
     formData.append('avatar', file);
-    console.log('..... uploadAvatar > formData', formData);
+
     return this.http.post<UserProfile>(
       `${USERS_ENDPOINT}/me/avatar`,
       formData

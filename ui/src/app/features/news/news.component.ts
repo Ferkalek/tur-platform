@@ -1,15 +1,17 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { NewsService } from '../../core/services/news.service';
 import { News } from '../../core/models/news.model';
 import { MSG_CONFIG } from '../../core/const';
 import { LoaderComponent } from '../../shared/components';
 import { StaticUrlPipe } from '../../shared/pipes';
+import { AuthService } from '../../core/services';
 
 @Component({
   selector: 'app-news',
@@ -21,6 +23,7 @@ import { StaticUrlPipe } from '../../shared/pipes';
     CommonModule,
     RouterLink,
     ToastModule,
+    ButtonModule,
     LoaderComponent,
     StaticUrlPipe
   ],
@@ -30,11 +33,13 @@ import { StaticUrlPipe } from '../../shared/pipes';
 })
 export class NewsComponent implements OnInit {
   private newsService = inject(NewsService);
+  private authService = inject(AuthService);
   private messageService = inject(MessageService);
+  private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
 
-  newsList: News[] = [];
+  newsList: Array<News & { canEdit: boolean }> = [];
   loading = true;
 
   ngOnInit(): void {
@@ -51,8 +56,13 @@ export class NewsComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: (data) => this.newsList = data,
+        next: (data) => this.newsList = data.map(news =>
+          ({ ...news, canEdit: this.authService.currentUser()?.id === news.userId })),
         error: () => this.messageService.add(MSG_CONFIG.defaultError),
       });
+  }
+
+  edit(newsId: string): void {
+    this.router.navigate(['/news', newsId, 'edit']);
   }
 }

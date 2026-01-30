@@ -5,7 +5,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { finalize, mergeMap, of } from 'rxjs';
+import { finalize } from 'rxjs';
 
 import { UsersNewsListComponent } from '../../news/users-news-list/users-news-list.component';
 import { News, NewsFormData } from '../../../core/models';
@@ -79,41 +79,17 @@ export class MyNewsComponent implements OnInit {
       header: 'Add News',
       ...this.defaultDialogConfig,
       data: {
-        userId: 'current-user-id'
+        userId: this.authService.currentUser()?.id || ''
       }
     };
     const dialogRef = this.dialogService.open(NewsFormComponent, dialogData);
     
     dialogRef?.onClose
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        mergeMap((result) => {
-          if (!result) {
-            return of(null);
-          }
-
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        if (data) {
           this.loading = true;
-
-          const newsItem = {
-            ...result,
-            image: this.getRandomImage(),
-          };
-          delete newsItem.userId;
-          
-          return this.newsService.createNews(newsItem);
-        }),
-      )
-      .subscribe({
-        next: (data) => {
-          if (!data) return;
-
-          this.messageService.add(MSG_CONFIG.createNewsSuccess);
           this.loadNews();
-        },
-        error: (error) => {
-          this.loading = false;
-
-          this.errorHandler(error, MSG_CONFIG.createNewsError);
         }
       });
   }
@@ -127,33 +103,12 @@ export class MyNewsComponent implements OnInit {
     const dialogRef = this.dialogService.open(NewsFormComponent, dialogData);
 
     dialogRef?.onClose
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        mergeMap((result) => {
-          if (!result) {
-            return of(null);
-          }
-
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        if (data) {
           this.loading = true;
-
-          const updatedNews = { ...result };
-          delete updatedNews.userId;
-          return this.newsService.updateNews(news.id, updatedNews as Partial<News>);
-        }
-      ))
-      .subscribe({
-        next: (data) => {
-          if (!data) return;
-
-          this.messageService.add(MSG_CONFIG.updateNewsSuccess);
-
           this.loadNews();
-        },
-        error: (error) => {
-          this.loading = false;
-
-          this.errorHandler(error, MSG_CONFIG.updateNewsError);
-        },
+        }
       });
   }
 
@@ -176,10 +131,6 @@ export class MyNewsComponent implements OnInit {
           this.errorHandler(error, MSG_CONFIG.deleteNewsError);
         },
       });
-  }
-
-  private getRandomImage(): string {
-    return `https://picsum.photos/800/400?random=${Math.floor(Math.random() * 100)}`;
   }
 
   private errorHandler(error: any, msgConfig: ToastMessageOptions, time = 1000): void {

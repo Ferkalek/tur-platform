@@ -37,12 +37,19 @@ export class AuthService {
       .pipe(tap((res) => this.handleAuthSuccess(res)));
   }
 
-  logout(): void {
+  logout(navigate: boolean = true): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.currentUserSignal.set(null);
     this.isAuthenticatedSignal.set(false);
-    this.router.navigate(['/login']);
+
+    if (navigate) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  getProfile(): Observable<User> {
+    return this.http.get<User>(`${AUTH_ENDPOINT}/profile`);
   }
 
   getToken(): string | null {

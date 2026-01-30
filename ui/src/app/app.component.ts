@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -18,10 +18,23 @@ import { AuthService } from './core/services';
     ButtonModule,
   ],
 })
-export class AppComponent {
-	authService = inject(AuthService);
+export class AppComponent implements OnInit {
+  authService = inject(AuthService);
 
-  logout(): void {
-    this.authService.logout();
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.authService.getProfile().subscribe({
+        next: () => {},
+        error: (err) => {
+          if (err?.statusCode === 401 || err.status === 401) {
+            this.logout(false);
+          }
+        }
+      });
+    }
+  }
+
+  logout(navigate: boolean = true): void {
+    this.authService.logout(navigate);
   }
 }

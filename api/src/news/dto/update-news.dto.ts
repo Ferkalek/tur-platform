@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, MaxLength, IsUrl } from 'class-validator';
+import { IsString, IsArray, IsOptional, MaxLength } from 'class-validator';
 
 export class UpdateNewsDto {
   @IsString()
@@ -36,12 +36,11 @@ export class UpdateNewsDto {
 
   @ApiPropertyOptional({
     description: 'URL зображення',
-    example: 'https://picsum.photos/800/400',
+    example: ['https://picsum.photos/800/400'],
   })
-  @IsString()
+  @IsArray()
   @IsOptional()
-  @IsUrl()
-  image?: string;
+  images?: string[];
 
   @IsString()
   @IsOptional()

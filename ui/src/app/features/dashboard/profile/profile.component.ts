@@ -15,7 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
-import { AuthService, ConfigService, ProfileService } from '../../../core/services';
+import { AuthService, ProfileService } from '../../../core/services';
 import { UserProfile } from '../../../core/models';
 import { LoaderComponent } from '../../../shared/components';
 import { MSG_CONFIG } from '../../../core/const';
@@ -40,7 +40,6 @@ import { StaticUrlPipe } from '../../../shared/pipes';
   ],
   providers: [
     MessageService,
-    ConfigService,
   ],
 })
 export class ProfileComponent implements OnInit {
@@ -51,8 +50,6 @@ export class ProfileComponent implements OnInit {
   private messageService = inject(MessageService);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
-
-  config = inject(ConfigService);
 
   profile: UserProfile;
   loading = true;

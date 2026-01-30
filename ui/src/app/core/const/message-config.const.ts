@@ -15,7 +15,9 @@ type MessageType = 'unauthorize'
   | 'updateAvatarError'
   | 'updateAvatarSuccess'
   | 'deleteAvatarSuccess'
-  | 'deleteAvatarError';
+  | 'deleteAvatarError'
+  | 'uploadingFilesSuccess'
+  | 'uploadingFilesError';
 
 export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
   unauthorize: {
@@ -94,4 +96,14 @@ export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
     summary: 'Deletting',
     detail: 'Error deleting Avatar'
   },
+  uploadingFilesSuccess: {
+    severity: 'success',
+    summary: 'Uploading files',
+    detail: 'Files have been uploaded succsessfully',
+  },
+  uploadingFilesError: {
+    severity: 'error',
+    summary: 'Error',
+    detail: 'Error uploading files'
+  }
 };

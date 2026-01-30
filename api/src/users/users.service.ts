@@ -64,7 +64,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    if (isUpdateAvatar) {
+    if (isUpdateAvatar && user.avatar) {
       // Deleting a file from disk
       const filePath = path.join(process.cwd(), user.avatar);
 

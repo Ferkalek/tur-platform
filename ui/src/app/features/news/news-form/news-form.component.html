@@ -64,7 +64,47 @@
         variant="simple"
       >Content is required</p-message>
     }
-  </div>    
+  </div>
+  
+  @if (imagesControl?.value && !!imagesControl?.value?.length) {
+    <div class="form-group">
+      <label>Uploaded images: ({{ imagesControl?.value?.length }})</label>
+      
+      <div class="flex gap-2">
+        @for (image of imagesControl?.value; track image; let i = $index) {
+          <!-- [class.cover]="image === news.coverImage" -->
+          <div class="image-item w-10rem relative overflow-hidden border-round-md" >
+            <img [src]="image | staticUrl" [alt]="'Image ' + (i + 1)">
+            
+            <div class="image-overlay">
+              <!-- @if (image !== news.coverImage) {
+                <p-button
+                  icon="pi pi-star"
+                  [rounded]="true"
+                  severity="warning"
+                  (onClick)="setCoverImage(image)"
+                  pTooltip="Встановити як головне"
+                />
+              } @else {
+                <span class="cover-badge">
+                  <i class="pi pi-star-fill"></i>
+                  Головне
+                </span>
+              } -->
+              
+              <button
+                pButton
+                icon="pi pi-trash"
+                [rounded]="true"
+                severity="danger"
+                (click)="deleteImage(image)"
+              ></button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
 
   <div class="card">
     <p-toast />
@@ -80,8 +120,7 @@
       chooseStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
       chooseIcon="pi pi-images"
       chooseLabel=""
-      uploadStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
-      uploadIcon="pi pi-cloud-upload"
+      showUploadButton="false"
       uploadLabel=""
       cancelStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
       cancelIcon="pi pi-times"
@@ -95,8 +134,6 @@
       [customUpload]="true"
       (onSelect)="onSelectFiles($event)"
       (onError)="onUploadError($event)"
-      (uploadHandler)="onUploadFiles($event)"
-      (onUpload)="onUpload($event)"
     >
       <ng-template #empty>
         <div class="text-center">

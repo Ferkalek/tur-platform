@@ -9,7 +9,6 @@ export class StaticUrlPipe implements PipeTransform {
   private config = inject(ConfigService);
 
   transform(fileName: string, folderPath?: string): string {
-    console.log('.......', fileName);
     return folderPath
       ? `${this.config.staticUrl}${folderPath}${fileName}`
       : `${this.config.staticUrl}${fileName}`;
