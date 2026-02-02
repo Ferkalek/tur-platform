@@ -17,7 +17,9 @@ type MessageType = 'unauthorize'
   | 'deleteAvatarSuccess'
   | 'deleteAvatarError'
   | 'uploadingFilesSuccess'
-  | 'uploadingFilesError';
+  | 'uploadingFilesError'
+  | 'deleteImageSuccess'
+  | 'deleteImageError';
 
 export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
   unauthorize: {
@@ -105,5 +107,15 @@ export const MSG_CONFIG: { [K in MessageType]: ToastMessageOptions } = {
     severity: 'error',
     summary: 'Error',
     detail: 'Error uploading files'
-  }
+  },
+  deleteImageSuccess: {
+    severity: 'success',
+    summary: 'Deleted Image',
+    detail: 'Image has been deleted successfully.',
+  },
+  deleteImageError: {
+    severity: 'error',
+    summary: 'Deleting Image',
+    detail: 'Error deleting image'
+  },
 };

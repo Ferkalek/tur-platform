@@ -108,7 +108,7 @@ export class NewsService {
 
     if (currentImagesCount + newImagesCount > 5) {
       throw new BadRequestException(
-        `Максимум 5 зображень на новину. Зараз: ${currentImagesCount}, намагаєтесь додати: ${newImagesCount}`,
+        `Maximum 5 images per news. Now: ${currentImagesCount}, trying to add: ${newImagesCount}`,
       );
     }
 

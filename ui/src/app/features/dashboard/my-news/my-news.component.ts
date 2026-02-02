@@ -86,10 +86,13 @@ export class MyNewsComponent implements OnInit {
     
     dialogRef?.onClose
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data) => {
-        if (data) {
+      .subscribe((result) => {
+        if (result?.hasChanges && !result?.error) {
           this.loading = true;
+          this.messageService.add(MSG_CONFIG.createNewsSuccess)
           this.loadNews();
+        } else if (result?.error) {
+          this.messageService.add(result.error);
         }
       });
   }
@@ -104,10 +107,17 @@ export class MyNewsComponent implements OnInit {
 
     dialogRef?.onClose
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data) => {
-        if (data) {
+      .subscribe((result) => {
+        if (result?.hasChanges && !result?.error) {
           this.loading = true;
+
+          if (result.action !== 'deleteImage') {
+          this.messageService.add(MSG_CONFIG.updateNewsSuccess);
+          }
+
           this.loadNews();
+        } else if (result?.error) {
+          this.messageService.add(result.error);
         }
       });
   }

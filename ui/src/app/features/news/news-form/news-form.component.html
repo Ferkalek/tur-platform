@@ -107,7 +107,7 @@
   }
 
   <div class="card">
-    <p-toast />
+    <p-toast position="bottom-left" />
     <p-fileUpload
       #filesUpload
       mode="advanced"
@@ -115,7 +115,7 @@
       accept="image/*"
       [maxFileSize]="100000"
       styleClass="hide-progressbar"
-      [fileLimit]="5"
+      [fileLimit]="fileLimit"
       [multiple]="true"
       chooseStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
       chooseIcon="pi pi-images"
@@ -149,16 +149,17 @@
       pButton
       type="button"
       class="p-button-outlined mr-2"
-      [label]="'Cansel'"
-      [disabled]="false"
+      [label]="'Cancel'"
+      [disabled]="uploading"
       (click)="close()"
     ></button>
     <button
       pButton
       type="button"
       [label]="'Save'"
+      [loading]="uploading"
       [disabled]="false"
-      [disabled]="form.invalid"
+      [disabled]="(hasChanges$ | async) === false || form.invalid"
       (click)="save()"
     ></button>
   </div>

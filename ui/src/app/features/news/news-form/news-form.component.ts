@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, switchMap } from 'rxjs';
+import { catchError, distinctUntilChanged, finalize, map, Observable, startWith, switchMap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,11 +9,12 @@ import { MessageModule } from 'primeng/message';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { News, NewsFormData, NewsFormType } from '../../../core/models';
 import { MSG_CONFIG } from '../../../core/const';
 import { NewsService } from '../../../core/services';
 import { StaticUrlPipe } from '../../../shared/pipes';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-news-form',
@@ -30,6 +31,7 @@ import { StaticUrlPipe } from '../../../shared/pipes';
     FileUploadModule,
     ToastModule,
     StaticUrlPipe,
+    AsyncPipe,
   ],
   providers: [MessageService]
 })
@@ -37,7 +39,6 @@ export class NewsFormComponent implements OnInit {
   @ViewChild('filesUpload') filesUpload!: FileUpload;
 
   private fb = inject(FormBuilder);
-  private dialogRef = inject(DynamicDialogRef);
   private dialogConfig = inject(DynamicDialogConfig<NewsFormData>);
   private messageService = inject(MessageService);
   private newsService = inject(NewsService);
@@ -53,8 +54,29 @@ export class NewsFormComponent implements OnInit {
 
   newsId: string;
   selectedFiles: File[] = [];
+  fileLimit = 5;
   uploading = false;
-  shouldUpdate = false;
+
+  hasChanges$: Observable<boolean>;
+
+  private dialogState = {
+    hasChanges: false,
+    action: 'none' as 'create' | 'update' | 'deleteImage' | 'none',
+    error: null as ToastMessageOptions | null,
+  };
+
+  private dialogRef: DynamicDialogRef;
+
+  constructor(dialogRef: DynamicDialogRef) {
+    this.dialogRef = dialogRef;
+    if (this.dialogRef) {
+      const originalClose = this.dialogRef.close.bind(this.dialogRef);
+
+      this.dialogRef.close = (result?: any) => {
+        originalClose(this.dialogState);
+      };
+    }
+  }
 
   get titleControl(): AbstractControl<string | null> | null {
     return this.form.get('title');
@@ -78,12 +100,26 @@ export class NewsFormComponent implements OnInit {
     if (this.newsId) {
       const { title, excerpt, content, images } = this.dialogConfig.data;
 
+      this.fileLimit = 5 - (images ? images.length : 0);
       this.form.patchValue({
         title,
         excerpt,
         content,
         images
       });
+
+      this.hasChanges$ = this.form.valueChanges.pipe(
+        startWith(this.form.value),
+        map(currentValue => {
+          return JSON.stringify(currentValue) !== JSON.stringify({
+            title: title || '',
+            excerpt: excerpt || '',
+            content: content || '',
+            images: images || []
+          });
+        }),
+        distinctUntilChanged(),
+      );
     }
   }
 
@@ -92,14 +128,26 @@ export class NewsFormComponent implements OnInit {
 
     const msgConfig = {
       create: {
-        next: () => this.messageService.add(MSG_CONFIG.createNewsSuccess),
-        error: () => this.messageService.add(MSG_CONFIG.createNewsError),
+        next: () => {},
+        error: () => this.dialogState.error = MSG_CONFIG.createNewsError,
       },
       update: {
-        next: () => this.messageService.add(MSG_CONFIG.updateNewsSuccess),
-        error: () => this.messageService.add(MSG_CONFIG.updateNewsError),
+        next: () => {},
+        error: () => this.dialogState.error = MSG_CONFIG.updateNewsError,
       }
     };
+
+    const dialogClose = () => {
+      this.dialogState.hasChanges = true;
+      this.dialogState.action = this.newsId ? 'update' : 'create';
+      this.dialogRef.close(this.dialogState);
+    };
+
+    const uploadingFilesError = (msg: string): ToastMessageOptions => ({
+      severity: 'error',
+      summary: 'Error',
+      detail: msg || 'Error uploading files',
+    });
 
     this.uploading = true;
 
@@ -107,6 +155,10 @@ export class NewsFormComponent implements OnInit {
       if (this.newsId) {
         this.newsService.addImages(this.newsId, this.selectedFiles)
           .pipe(
+            catchError((error) => {
+              this.dialogState.error = uploadingFilesError(error.error.message);
+              throw error;
+            }),
             switchMap((news: News) => {
               const updatedNews = {
                 ...this.dialogConfig.data,
@@ -118,17 +170,21 @@ export class NewsFormComponent implements OnInit {
               return this.newsService.updateNews(news.id, updatedNews as Partial<News>);
             }),
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.dialogRef.close(true)),
+            finalize(() => dialogClose()),
           )
-          .subscribe(msgConfig.update);
+          .subscribe(() => msgConfig.update);
       } else {
         this.newsService.createNews(this.form.value as NewsFormData)
           .pipe(
+            catchError((error) => {
+              this.dialogState.error = uploadingFilesError(error.error.message);
+              throw error;
+            }),
             switchMap((news: News) => {
               return this.newsService.addImages(news.id, this.selectedFiles);
             }),
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.dialogRef.close(true)),
+            finalize(() => dialogClose()),
           )
           .subscribe(msgConfig.create);
       }
@@ -143,14 +199,14 @@ export class NewsFormComponent implements OnInit {
         this.newsService.updateNews(this.newsId, updatedNews as Partial<News>)
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.dialogRef.close(true)),
+            finalize(() => dialogClose()),
           )
           .subscribe(msgConfig.update);
       } else {
         this.newsService.createNews(this.form.value as NewsFormData)
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.dialogRef.close(true)),
+            finalize(() => dialogClose()),
           )
           .subscribe(msgConfig.create);
       }
@@ -158,11 +214,19 @@ export class NewsFormComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close(this.shouldUpdate);
+    this.dialogRef.close(this.dialogState);
   }
 
   onSelectFiles(event: any): void {
-    this.selectedFiles = event.currentFiles;
+    if ((this.imagesControl?.value?.length + event.currentFiles.length) > this.fileLimit) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Maximum 5 images per news. Now: ${this.imagesControl?.value?.length}, trying to add: ${event.currentFiles.length}`,
+      });
+    } else {
+      this.selectedFiles = event.currentFiles;
+    }
   }
 
   onUploadError(event: any): void {
@@ -175,6 +239,7 @@ export class NewsFormComponent implements OnInit {
       return;
     }
 
+    this.uploading = true;
     this.newsService.deleteImage(this.newsId, imageUrl)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -186,7 +251,8 @@ export class NewsFormComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.shouldUpdate = true;
+          this.dialogState.hasChanges = true;
+          this.dialogState.action = 'deleteImage';
           this.imagesControl?.setValue((this.imagesControl?.value || []).filter(img => img !== imageUrl));
           
           // // Якщо видалили головне зображення - встановлюємо перше як головне
@@ -194,22 +260,11 @@ export class NewsFormComponent implements OnInit {
           //   this.news.coverImage = this.news.images[0];
           // }
           
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Видалено',
-            detail: 'Зображення видалено',
-            life: 2000
-          });
+          this.messageService.add(MSG_CONFIG.deleteImageSuccess);
         },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Помилка',
-            detail: 'Не вдалося видалити зображення'
-          });
-        }
+        error: () => this.messageService.add(MSG_CONFIG.deleteImageError),
       });
-  }
+    }
 
   setCoverImage(imageUrl: string) {
   //   if (!this.newsId) {
