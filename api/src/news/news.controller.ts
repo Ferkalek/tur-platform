@@ -68,6 +68,21 @@ export class NewsController {
     return await this.newsService.findOne(id);
   }
 
+  // GET /api/news/:id/ownership/:userId - check news ownership
+  @Get(':id/ownership/:userId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Перевірити право власності на новину' })
+  @ApiParam({ name: 'id', description: 'UUID новини' })
+  @ApiParam({ name: 'userId', description: 'UUID користувача' })
+  @ApiResponse({ status: 200, description: 'Право власності перевірено' })
+  async checkOwnership(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+  ): Promise<boolean> {
+    return await this.newsService.checkOwnership(id, userId);
+  }
+
   // POST /api/news - create a news item
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -154,7 +169,7 @@ export class NewsController {
     @Body() updateNewsDto: UpdateNewsDto,
     @CurrentUser() user: User,
   ): Promise<ResponseBaseNewsDto> {
-    return await this.newsService.update(id, updateNewsDto, user.id);
+    return await this.newsService.update(id, { ...updateNewsDto, id }, user.id);
   }
 
   // DELETE /api/news/:id - delete a news item

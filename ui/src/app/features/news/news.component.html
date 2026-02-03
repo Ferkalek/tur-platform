@@ -7,7 +7,7 @@
 	<div class="news-grid animation-fade-in">
 		@for (item of newsList; track item.id) {
 		<article class="flex flex-column news-card overflow-hidden bg-white border-round-lg">
-			<div class="bg-gray-100 h-12rem">
+			<div class="bg-gray-100 h-12rem relative">
 				@if (item.images.length) {
 					<img
 						[src]="item.images[0] | staticUrl"
@@ -20,6 +20,7 @@
 						pButton
 						type="button"
 						icon="pi pi-pencil"
+						class="absolute m-2 opacity-50 right-0 top-0"
           	[rounded]="true"
           	[outlined]="true"
 						(click)="edit(item.id)"

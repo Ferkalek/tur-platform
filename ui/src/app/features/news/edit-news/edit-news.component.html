@@ -1,0 +1,170 @@
+@if (loading) {
+	<app-loader />
+}
+<h2>Edit News</h2>
+<div class="card animation-fade-in" [formGroup]="form">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input
+      pInputText
+      type="text"
+      id="title"
+      formControlName="title"
+      [invalid]="titleControl?.invalid && titleControl?.touched"
+    />
+    @if (titleControl?.errors?.['required'] && titleControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Title is required</p-message>
+    } @else if (titleControl?.errors?.['maxlength'] && titleControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Title is too big</p-message>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="excerpt">Excerpt</label>
+    <input
+      pInputText
+      type="text"
+      id="excerpt"
+      formControlName="excerpt"
+      [invalid]="excerptControl?.invalid && excerptControl?.touched"
+    />
+    @if (excerptControl?.errors?.['required'] && excerptControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Excerpt is required</p-message>
+    } @else if (excerptControl?.errors?.['maxlength'] && excerptControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Excerpt is too big</p-message>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="content">Content</label>
+    <textarea
+      pTextarea
+      id="content"
+      formControlName="content"
+      rows="6"
+      [invalid]="contentControl?.invalid && contentControl?.touched"
+    ></textarea>
+    @if (contentControl?.invalid && contentControl?.touched) {
+      <p-message
+        severity="error"
+        size="small"
+        variant="simple"
+      >Content is required</p-message>
+    }
+  </div>
+
+  @if (imagesControl?.value && !!imagesControl?.value?.length) {
+    <div class="form-group">
+      <label>Uploaded images: ({{ imagesControl?.value?.length }})</label>
+      
+      <div class="flex gap-2">
+        @for (image of imagesControl?.value; track image; let i = $index) {
+          <!-- [class.cover]="image === news.coverImage" -->
+          <div class="image-item w-10rem relative overflow-hidden border-round-md" >
+            <img [src]="image | staticUrl" [alt]="'Image ' + (i + 1)">
+            
+            <div class="image-overlay">
+              <!-- @if (image !== news.coverImage) {
+                <p-button
+                  icon="pi pi-star"
+                  [rounded]="true"
+                  severity="warning"
+                  (onClick)="setCoverImage(image)"
+                  pTooltip="Встановити як головне"
+                />
+              } @else {
+                <span class="cover-badge">
+                  <i class="pi pi-star-fill"></i>
+                  Головне
+                </span>
+              } -->
+              
+              <button
+                pButton
+                icon="pi pi-trash"
+                [rounded]="true"
+                severity="danger"
+                (click)="deleteImage(image)"
+              ></button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="card">
+    <p-toast position="bottom-left" />
+    <p-fileUpload
+      #filesUpload
+      mode="advanced"
+      name="newsImages"
+      accept="image/*"
+      [maxFileSize]="100000"
+      styleClass="hide-progressbar"
+      [fileLimit]="fileLimit"
+      [multiple]="true"
+      chooseStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
+      chooseIcon="pi pi-images"
+      chooseLabel=""
+      showUploadButton="false"
+      uploadLabel=""
+      cancelStyleClass="p-button-sm border-0 p-button-icon-only p-button-outlined p-button-rounded"
+      cancelIcon="pi pi-times"
+      cancelLabel=""
+      [invalidFileLimitMessageSummary]="'Maximum number of files'"
+      [invalidFileLimitMessageDetail]="'is {0}'"
+      [invalidFileTypeMessageSummary]="'{0} - invalid file type, allowed only images'"
+      invalidFileTypeMessageDetail=""
+      [invalidFileSizeMessageSummary]="'{0} - invalid file size,'"
+      [invalidFileSizeMessageDetail]="'maximum upload size is {0}'"
+      [customUpload]="true"
+      (onSelect)="onSelectFiles($event)"
+      (onError)="onUploadError($event)"
+      (onClear)="onClearFiles()"
+    >
+      <ng-template #empty>
+        <div class="text-center">
+          <i class="pi pi-cloud-upload text-5xl text-gray-400"></i>
+          <p>Drag and drop files to here to upload.</p>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+
+  <div class="flex justify-content-end mt-3">
+    <button
+      pButton
+      type="button"
+      class="p-button-outlined mr-2"
+      [label]="'Discard'"
+      [disabled]="((hasChanges$ | async) === false && !selectedFiles.length) || loading"
+      (click)="cancel()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      [label]="'Save'"
+      [loading]="loading"
+      [disabled]="false"
+      [disabled]="((hasChanges$ | async) === false && !selectedFiles.length) || form.invalid"
+      (click)="save()"
+    ></button>
+  </div>
+</div>

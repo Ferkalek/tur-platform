@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './core/guards';
+import { authGuard, guestGuard, ownerNewsGuard } from './core/guards';
 
 export const routes: Routes = [
 	{
@@ -28,6 +28,12 @@ export const routes: Routes = [
     path: 'news/:id',
     loadComponent: () => import('./features/news/news-detail/news-detail.component').then(m => m.NewsDetailComponent),
     title: 'News Details',
+  },
+  {
+    path: 'news/:id/edit',
+    canActivate: [authGuard, ownerNewsGuard],
+    loadComponent: () => import('./features/news/edit-news/edit-news.component').then(m => m.EditNewsComponent),
+    title: 'Edit News',
   },
   {
     path: 'profile',

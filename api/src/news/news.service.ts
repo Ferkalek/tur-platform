@@ -48,6 +48,14 @@ export class NewsService {
     return news.map((item) => this.mapToBaseNews(item));
   }
 
+  async checkOwnership(newsId: string, userId: string): Promise<boolean> {
+    const news = await this.newsRepository.findOne({
+      where: { id: newsId },
+    });
+
+    return news?.userId === userId;
+  }
+
   // GET one news item by ID
   async findOne(id: string): Promise<ResponseNewsDto> {
     const news = await this.newsRepository.findOne({
@@ -172,7 +180,6 @@ export class NewsService {
       throw new ForbiddenException('You are not allowed to update this news');
     }
 
-    console.log('.......... updateNewsDto', updateNewsDto);
     Object.assign(news, updateNewsDto);
 
     const res = await this.newsRepository.save(news);

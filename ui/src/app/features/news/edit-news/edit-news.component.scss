@@ -1,0 +1,48 @@
+@forward '../../../../styles/basic';
+
+.image-item {
+  aspect-ratio: 16/9;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+
+//   &.cover {
+//     border-color: var(--warning-color, #ff9800);
+//   }
+
+  img {
+    @extend .image-cover;
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    padding: 0.5rem;
+    justify-content: end;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    .image-overlay {
+      opacity: 1;
+    }
+  }
+
+//   .cover-badge {
+//     position: absolute;
+//     top: 0.5rem;
+//     right: 0.5rem;
+//     background: var(--warning-color, #ff9800);
+//     color: white;
+//     padding: 0.25rem 0.75rem;
+//     border-radius: 20px;
+//     font-size: 0.875rem;
+//     font-weight: 600;
+//     display: flex;
+//     align-items: center;
+//     gap: 0.25rem;
+//   }
+}

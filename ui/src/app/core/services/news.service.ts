@@ -18,6 +18,10 @@ export class NewsService {
     return this.http.get<News>(`${NEWS_ENDPOINT}/${id}`);
   }
 
+  checkNewsOwnership(newsId: string, userId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${NEWS_ENDPOINT}/${newsId}/ownership/${userId}`);
+  }
+
   getUserNews(userId: string): Observable<News[]> {
     return this.http.get<News[]>(`${NEWS_ENDPOINT}/user/${userId}`);
   }
